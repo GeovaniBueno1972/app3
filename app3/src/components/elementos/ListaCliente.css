@@ -1,0 +1,23 @@
+.container{
+    display: flex;
+    
+}
+
+.container :hover{
+    background-color: #ccc;
+}
+.codigo{
+    display: flex;
+    border: 1px solid red;
+    width: 100px;
+}
+.nome{
+    display: flex;
+    border: 1px solid red;
+    width: 400px;
+}
+.fone{
+    display: flex;
+    border: 1px solid red;
+    width: 300px;
+}
