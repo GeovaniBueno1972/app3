@@ -1,0 +1,68 @@
+.container{
+    
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width:80%;
+    border: solid 1px #ccc;
+    height:200px;
+    border-radius: 30px;
+    background: #C4C4C4;
+    box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
+    
+}
+#cod_cliente{
+    width:70px;
+    font-size: 20px;
+}
+#nome_cliente{
+    width:400px;
+    font-size: 20px;
+}
+#fone_cliente{
+    font-size: 20px;
+}
+#bairro_cliente{
+    width: 400px;
+    font-size: 20px;
+}
+.linha1 {
+    margin-top: 30px;
+    display: flex;
+    overflow: auto;
+}
+.linha2{
+    margin-top: 30px;
+    display: flex;
+    overflow: auto;
+}
+.botao-salvar{
+    background-color: green;
+    width: 100px;
+    color: white;
+    font-size: 20px;
+}
+.botao-cancelar{
+    background-color: rgb(255, 94, 0);
+    width: 100px;
+    color: white;
+    font-size: 20px;
+}
+.botao-limpar{
+    background-color: rgb(0, 140, 255);
+    width: 100px;
+    color: white;
+    font-size: 20px;
+}
+
+.input-cliente{
+    
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+}
+.input_Text{
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid black;
+}

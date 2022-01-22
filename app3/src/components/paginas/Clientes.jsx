@@ -1,7 +1,10 @@
 import React from 'react';
 import {useState, useEffect} from 'react'
+import Button from '@mui/material/Button';
 import axios from 'axios'
-import ListaCliente from '../elementos/ListaCliente'
+//import ListaCliente from '../elementos/ListaCliente'
+import AdminClientes from '../elementos/AdminClientes'
+import TabelaCliente from '../elementos/TabelaClientes'
 
 const Clientes = () => {
     const [clientes, setCliente] = useState([])
@@ -15,17 +18,14 @@ const Clientes = () => {
             
     }
 
-
-
-    const listaClientes = clientes.map(
-        (c)=> <ListaCliente nome={c.name} fone={c.fone}/>
-        )
-
+    
 
     return (
         <>
-        <button onClick={() => loadClientes()}>Clientes</button>
-        <p>{listaClientes}</p>
+        <AdminClientes clientes={clientes} setCliente={setCliente} />
+        <Button color="success" variant="contained" onClick={() => loadClientes()}>Clientes</Button>
+        
+        <TabelaCliente clientes={clientes}/>
         </>
      );
 }

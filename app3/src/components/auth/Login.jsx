@@ -6,10 +6,7 @@ import { useHistory } from "react-router-dom";
 
 import "./Login.css";
 
-
-function initialState() {
-  return { name: "", password: "" };
-}
+const initialState = { name: "", password: "" };
 
 
 /*
@@ -28,40 +25,36 @@ async function login({name, password}){
 */
 
 const UserLogin = () => {
-  const [values, setValues] = useState(initialState());
-  const [user, setUser] = useState({})
-  const [token, setToken] = useState({})
-  const history = useHistory();
+  const [user, setUser] = useState(initialState)
   const { authCtx } = useAppContext();
 
   function onChange(event) {
     const { value, name } = event.target;
 
-    setValues({
-      ...values,
+    setUser({
+      ...user,
       [name]: value,
     });
   }
 
   const userLogin = async () => {
       let baseApiUrl = 'https://teste-backend-gb.herokuapp.com'
-      const data = await axios.post(`${baseApiUrl}/signin`, user)
-      setToken(data.data.token)
-      authCtx.updateToken(token);
+      const {data} = await axios.post(`${baseApiUrl}/signin`, user)
+      authCtx.updateToken(data.token);
     }
   
 
   async function onSubmit(event) {
     event.preventDefault();
-    setUser(values)
-    console.log(user);
+    
+    console.log(`Valores: ${user.name}, ${user.password}`);
     await userLogin(user)
-    if (token) {
+    if (authCtx.token) {
        console.log(axios.defaults.headers.common['Authorization'])    
       //return history.push('/')
     }
 
-    setValues(initialState);
+    setUser(initialState);
   }
 
   return (
@@ -76,7 +69,7 @@ const UserLogin = () => {
             name="name"
             autoComplete="off"
             onChange={onChange}
-            value={values.name}
+            value={user.name}
           />
         </div>
         <div className="user-login__form-control">
@@ -86,12 +79,12 @@ const UserLogin = () => {
             type="password"
             name="password"
             onChange={onChange}
-            value={values.password}
+            value={user.password}
           />
         </div>
         <button>Login</button>
       </form>
-      
+      <div>{authCtx.token}</div>
     </div>
   );
 };
