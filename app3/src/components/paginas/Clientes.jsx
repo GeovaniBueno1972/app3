@@ -7,22 +7,26 @@ import AdminClientes from '../elementos/AdminClientes'
 import TabelaCliente from '../elementos/TabelaClientes'
 
 const Clientes = () => {
-    const [clientes, setCliente] = useState([])
+    const [clientes, setClientes] = useState([])
 
     async function loadClientes(){
         let baseApiUrl = 'https://teste-backend-gb.herokuapp.com'
         const url = `${baseApiUrl}/clientes`
         const data = await axios.get(url) 
-        setCliente(data.data)
+        setClientes(data.data)
         console.log(data.data)
             
     }
 
-    
+    useEffect(
+        ()=> {
+            loadClientes()          
+        }
+    )
 
     return (
         <>
-        <AdminClientes clientes={clientes} setCliente={setCliente} />
+        <AdminClientes clientes={clientes} setClientes={setClientes} />
         <Button color="success" variant="contained" onClick={() => loadClientes()}>Clientes</Button>
         
         <TabelaCliente clientes={clientes}/>

@@ -37,7 +37,7 @@ export default function TabelaClientes(props) {
   };
 
   const rows = props.clientes;
-  console.log("Linhas" + rows);
+  
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
