@@ -15,7 +15,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function TabelaClientes(props) {
+export default function TabelaMateriais(props) {
   const theme = useTheme();
 
   const themeWithLocale = React.useMemo(() =>
@@ -23,10 +23,9 @@ export default function TabelaClientes(props) {
   );
 
   const columns = [
-    { id: "id", label: "Código", minWidth: 20 },
-    { id: "name", label: "Nome", minWidth: 100 },
-    { id: "fone", label: "Fone", minWidth: 170 },
-    { id: "bairro", label: "Bairro", minWidth: 170 },
+    { id: "codigo", label: "Código", minWidth: 20 },
+    { id: "nome", label: "Nome", minWidth: 200 },
+    { id: "unidade", label: "unidade", minWidth: 20 },
   ];
 
   const [page, setPagina] = React.useState(0);
@@ -41,12 +40,12 @@ export default function TabelaClientes(props) {
     setPagina(0);
   };
 
-  function remove(cliente) {
-    console.log(cliente);
+  function remove(material) {
+    console.log(material);
     const baseApiUrl = "https://teste-producao1.herokuapp.com";
-    const id = cliente.id;
+    const id = material.codigo;
     axios
-      .delete(`${baseApiUrl}/clientes/${id}`)
+      .delete(`${baseApiUrl}/materiais/${id}`)
       .then(() => {
         notify("success");
         props.recarregar()
@@ -56,13 +55,13 @@ export default function TabelaClientes(props) {
 
   const notify = (tipo) => {
     if (tipo === "success") {
-      toast.success("Cliente excluido com sucesso!");
+      toast.success("Material excluido com sucesso!");
     } else {
       toast.error("");
     }
   };
 
-  const rows = props.clientes;
+  const rows = props.materiais;
 
   return (
     <>
@@ -113,7 +112,7 @@ export default function TabelaClientes(props) {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={props.clientes.length}
+            count={props.materiais.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePagina}

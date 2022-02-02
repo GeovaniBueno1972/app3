@@ -5,6 +5,8 @@ import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function AdminClientes(props) {
@@ -16,6 +18,7 @@ export default function AdminClientes(props) {
 }
 
   const [cliente, setCliente] = useState(estadoInicial);
+  const baseApiUrl = 'https://teste-producao1.herokuapp.com'
 
   function onChange(event) {
     const { value, name } = event.target;
@@ -29,27 +32,40 @@ export default function AdminClientes(props) {
 
   async function save(){
     console.log(cliente)
+    let status=''
     let codigo = parseInt(cliente.id, 10);
     setCliente({'id': codigo, 'name': cliente.name, 'fone': cliente.fone, 'bairro':cliente.bairro})
-    let baseApiUrl = 'https://teste-producao1.herokuapp.com'
     await axios.post(`${baseApiUrl}/clientes`, cliente)
     .then((res) => {
-      console.log(res.status)
-      if (res.status === 204) {
-        let novoCliente = props.clientes
-        novoCliente.push(cliente)
-        console.log(novoCliente)
-        props.setClientes(novoCliente)
+            status = res.status
+            const novoCliente = [...props.clientes, cliente]
+            props.setClientes(novoCliente)
+          }
+          )
+    .catch((err) => {
+      status = err.status
+    })    
+    if (status === 204) {
+        notify('success')
+      } else {
+        notify('error')
       }
-      console.log(props.clientes)
-  })
       
 }
 
   const limpar = () => {setCliente(estadoInicial)}
 
+  const notify = (tipo) => {
+    if(tipo === 'success'){
+      toast.success('Usuário cadastrado com sucesso!');
+    }else {
+      toast.error('Usuário não foi cadastrado! Verifique se o código já está em uso ou se todas as informações foram preenchidas')
+    }
+}
+    
 
   return (
+    <>
     <Box sx={{ flexGrow: 1 }}>
       <Grid container  spacing={2} margin={3}>
         <Grid item xs={2}>
@@ -104,7 +120,8 @@ export default function AdminClientes(props) {
           </ButtonGroup>
         </Grid>
       </Grid>
-        
     </Box>
+      <ToastContainer />  
+    </>
   );
 }

@@ -1,9 +1,14 @@
 import React from 'react';
 
+
 const Pagina2 = () => {
+
+    
+
     return ( 
         <>
         <h1>Pagina 2</h1>
+        
         </>
      );
 }
