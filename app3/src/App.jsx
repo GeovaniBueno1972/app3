@@ -1,6 +1,6 @@
 import {Switch, Route, Link} from 'react-router-dom'
 import Materiais from './components/paginas/Materiais'
-import Pg2 from './components/paginas/Pagina2'
+import Usuarios from './components/paginas/Usuarios'
 import Pg3 from './components/paginas/Pagina3'
 import Clientes from './components/paginas/Clientes'
 
@@ -15,7 +15,7 @@ export function App() {
         <Link to="./login">Login</Link>
         <Link to="/">Home</Link>
         <Link to="./materiais">Materiais</Link>
-        <Link to="./pag2">Pagina 2</Link>
+        <Link to="./usuarios">Usuários</Link>
         <Link to="./pag3">Pagina 3</Link>
         <Link to="./clientes">Clientes</Link>
       </header>
@@ -23,7 +23,7 @@ export function App() {
         <Switch>
           <Route path="/login" component={Login} />
           <Route path="/materiais" component={Materiais}/>
-          <Route path="/pag2" component={Pg2}/>
+          <Route path="/usuarios" component={Usuarios}/>
           <Route path="/pag3" component={Pg3}/>
           <Route path="/clientes" component={Clientes}/>
         </Switch>
