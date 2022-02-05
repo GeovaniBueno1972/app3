@@ -31,25 +31,19 @@ export default function AdminClientes(props) {
   }
 
   async function save(){
-    console.log(cliente)
-    let status=''
     let codigo = parseInt(cliente.id, 10);
     setCliente({'id': codigo, 'name': cliente.name, 'fone': cliente.fone, 'bairro':cliente.bairro})
-    await axios.post(`${baseApiUrl}/clientes`, cliente)
+    axios.post(`${baseApiUrl}/clientes`, cliente)
     .then((res) => {
-            status = res.status
+            notify('success')
             const novoCliente = [...props.clientes, cliente]
             props.setClientes(novoCliente)
           }
           )
     .catch((err) => {
-      status = err.status
+      notify('error')      
     })    
-    if (status === 204) {
-        notify('success')
-      } else {
-        notify('error')
-      }
+   
       
 }
 

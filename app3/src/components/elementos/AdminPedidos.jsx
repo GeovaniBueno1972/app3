@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { TextField } from "@mui/material";
@@ -7,19 +7,15 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import Select from "@material-ui/core/Select";
-// import InputLabel from "@material-ui/core/InputLabel";
-// import MenuItem from "@material-ui/core/MenuItem";
-import Autocomplete from "@mui/material/Autocomplete";
-import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
-import LocalizationProvider from "@material-ui/lab/LocalizationProvider";
-import DateTimePicker from '@mui/lab/DateTimePicker';
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import Input from "@material-ui/core/Input";
+
 
 export default function AdminPedidos(props) {
   const estadoInicial = {
     numero: 0,
-    data_entrega: "",
-    user_id: 0,
     cliente_id: 0,
     estado: "Aguardando",
   };
@@ -38,32 +34,25 @@ export default function AdminPedidos(props) {
     });
   }
 
-  async function save() {
-    console.log(pedido);
-    let status = "";
-    //let codigo = parseInt(Pedido.id, 10);
+  useEffect(() => {
     setPedido({
-      numero: pedido.name,
-      data_entrega: pedido.data_entrega,
-      user_id: pedido.user_id,
-      cliente_id: pedido.cliente_id,
+      ...pedido,
+      data_entrega: agora(),
+      user_id: localStorage.getItem("usuario_id"),
     });
-    await axios
+  }, []);
+
+  async function save() {
+    axios
       .post(`${baseApiUrl}/pedidos`, pedido)
       .then((res) => {
-        status = res.status;
-        console.log(pedido);
         const novoPedido = [...props.pedidos, pedido];
         props.setPedidos(novoPedido);
+        notify("success");
       })
       .catch((err) => {
-        status = err.status;
+        notify("error");
       });
-    if (status === 204) {
-      notify("success");
-    } else {
-      notify("error");
-    }
   }
 
   const limpar = () => {
@@ -72,19 +61,45 @@ export default function AdminPedidos(props) {
 
   const notify = (tipo) => {
     if (tipo === "success") {
-      toast.success("Usuário cadastrado com sucesso!");
+      toast.success("Pedido cadastrado com sucesso!");
     } else {
       toast.error(
-        "Usuário não foi cadastrado! Verifique se o código já está em uso ou se todas as informações foram preenchidas"
+        "Pedido não foi cadastrado! Verifique se o código já está em uso ou se todas as informações foram preenchidas"
       );
     }
+  };
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+  const dia = new Date();
+  const agora = () => {
+    let dd = dia.getDate();
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+    let mm = dia.getMonth() + 1;
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    let yy = dia.getFullYear();
+    let hoje = yy + "-" + mm + "-" + dd;
+    return hoje;
   };
 
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2} margin={3}>
-          <Grid item xs={2}>
+          <Grid item xs={1}>
             <TextField
               fullWidth
               label="Número Pedido"
@@ -96,38 +111,42 @@ export default function AdminPedidos(props) {
             ></TextField>
           </Grid>
           <Grid item xs={4}>
-            <Autocomplete
-              id="free-solo-demo"
-              freeSolo
-              options={props.clientes.map((option) => option.name)}
-              renderInput={(params) => (
-                <TextField {...params} variant="standard" label="Cliente" />
-              )}
-            />
+            <InputLabel id="demo-mutiple-name-label">Name</InputLabel>
+            <Select
+              fullWidth
+              labelId="demo-mutiple-name-label"
+              name="cliente_id"
+              value={pedido.cliente_id}
+              onChange={onChange}
+              input={<Input />}
+              MenuProps={MenuProps}
+            >
+              {props.clientes.map((name) => (
+                <MenuItem key={name.id} value={name.id}>
+                  {name.name}
+                </MenuItem>
+              ))}
+            </Select>
           </Grid>
-          <br />
-          <Grid item xs={4}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                renderInput={(props) => <TextField {...props} />}
-                label="DateTimePicker"
-                name="data_entrega"
-                value={pedido.data_entrega}
-                onChange={ onChange }
-              />
-            </LocalizationProvider>
+          <Grid item xs={1.5}>
+            <Button variant="contained" aria-label="outlined primary button">
+              Novo Cliente
+            </Button>
           </Grid>
-          <Grid item xs={4}>
+
+          <Grid item xs={2}>
             <TextField
               fullWidth
-              label="Confirme a Senha"
+              label="Data de entrega"
               variant="standard"
-              name="confirmPassword"
+              defaultValue={pedido.data_entrega}
+              type="date"
+              name="data_entrega"
               onChange={onChange}
-              value={""}
+              value={pedido.data_entrega}
             ></TextField>
           </Grid>
-          <Grid container justifyContent="flex-end" item xs={7}>
+          <Grid container justifyContent="flex-end" item xs={2.5}>
             <ButtonGroup
               variant="contained"
               aria-label="outlined primary button group"

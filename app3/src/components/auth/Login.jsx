@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useAppContext } from "../../data/hooks/hook";
 
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 
 import "./Login.css";
 
@@ -40,14 +40,14 @@ const UserLogin = () => {
   const userLogin = async () => {
       let baseApiUrl = 'https://teste-backend-gb.herokuapp.com'
       const {data} = await axios.post(`${baseApiUrl}/signin`, user)
+      localStorage.setItem('usuario_id', data.id)
+      localStorage.setItem('usuario_nome', data.name)
       authCtx.updateToken(data.token);
     }
   
 
   async function onSubmit(event) {
     event.preventDefault();
-    
-    console.log(`Valores: ${user.name}, ${user.password}`);
     await userLogin(user)
     if (authCtx.token) {
        console.log(axios.defaults.headers.common['Authorization'])    
