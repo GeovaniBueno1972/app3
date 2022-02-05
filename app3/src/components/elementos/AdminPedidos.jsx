@@ -12,6 +12,14 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+import AdminClientes from './AdminClientes'
+
 
 export default function AdminPedidos(props) {
   const estadoInicial = {
@@ -21,6 +29,16 @@ export default function AdminPedidos(props) {
   };
 
   const [pedido, setPedido] = useState(estadoInicial);
+
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    props.recarregar()
+  };
 
   const baseApiUrl = "https://teste-producao1.herokuapp.com";
 
@@ -111,7 +129,7 @@ export default function AdminPedidos(props) {
             ></TextField>
           </Grid>
           <Grid item xs={4}>
-            <InputLabel id="demo-mutiple-name-label">Name</InputLabel>
+            <InputLabel id="demo-mutiple-name-label">Cliente</InputLabel>
             <Select
               fullWidth
               labelId="demo-mutiple-name-label"
@@ -129,7 +147,7 @@ export default function AdminPedidos(props) {
             </Select>
           </Grid>
           <Grid item xs={1.5}>
-            <Button variant="contained" aria-label="outlined primary button">
+            <Button variant="contained" aria-label="outlined primary button" onClick={handleClickOpen}>
               Novo Cliente
             </Button>
           </Grid>
@@ -159,6 +177,19 @@ export default function AdminPedidos(props) {
         </Grid>
       </Box>
       <ToastContainer />
+
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" 
+      maxWidth={"md"}>
+        <DialogTitle id="form-dialog-title">Cadastro de Clientes</DialogTitle>
+        <DialogContent >
+          <AdminClientes />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Fechar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

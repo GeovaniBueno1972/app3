@@ -29,7 +29,7 @@ const Pedidos = () => {
 
   return (
     <>
-      <AdminPedidos pedidos={pedidos} setPedidos={setPedidos} clientes={clientes} />
+      <AdminPedidos pedidos={pedidos} setPedidos={setPedidos} clientes={clientes} recarregar={loadClientes}/>
       <hr></hr>
      
     </>
