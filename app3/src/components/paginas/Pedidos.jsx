@@ -2,21 +2,23 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AdminPedidos from "../elementos/AdminPedidos";
+import MatPedidos from "../elementos/MatPedidos";
 //import TabelaUsuarios from "../elementos/TabelaUsuarios";
 
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);
   const [clientes, setClientes] = useState([]);
+  const [pedidoAtual, setPedidoAtual] = useState('');
+
+  const baseApiUrl = "https://teste-backend-gb.herokuapp.com";
 
   async function loadPedidos() {
-    let baseApiUrl = "https://teste-backend-gb.herokuapp.com";
     const url = `${baseApiUrl}/users`;
     const data = await axios.get(url);
     setPedidos(data.data);
   }
 
   async function loadClientes() {
-    let baseApiUrl = "https://teste-backend-gb.herokuapp.com";
     const url = `${baseApiUrl}/clientes`;
     const data = await axios.get(url);
     setClientes(data.data);
@@ -24,14 +26,20 @@ const Pedidos = () => {
 
   useEffect(() => {
     loadPedidos();
-    loadClientes()
+    loadClientes();
   }, []);
 
   return (
     <>
-      <AdminPedidos pedidos={pedidos} setPedidos={setPedidos} clientes={clientes} recarregar={loadClientes}/>
-      <hr></hr>
-     
+      <AdminPedidos
+        pedidos={pedidos}
+        setPedidos={setPedidos}
+        clientes={clientes}
+        recarregar={loadClientes}
+        setPedidoAtual={setPedidoAtual}
+      />
+      <hr />
+      {pedidoAtual ? <MatPedidos pedidoAtual={pedidoAtual} /> : ""}
     </>
   );
 };

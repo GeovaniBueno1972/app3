@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -15,22 +17,35 @@ import Input from "@material-ui/core/Input";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+//import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import AdminClientes from './AdminClientes'
-import MatPedidos from './MatPedidos'
+import AdminMateriais from '../elementos/AdminMateriais'
 
 
+const MatPedidos = (props) => {
+  const baseApiUrl = "https://teste-producao1.herokuapp.com";
+  
 
-export default function AdminPedidos(props) {
+  const [matPedido, setMatPedido] = useState([]);
+  const [materiais, setMateriais] = useState([]);
+
   const estadoInicial = {
-    numero: 0,
-    cliente_id: 0,
-    estado: "Aguardando",
-  };
+    pedido_numero: props.pedidoAtual,
+    material_id: '',
+    quantidade: 0,
+  }
 
-  const [pedido, setPedido] = useState(estadoInicial);
+  
+  function onChange(event) {
+    const { value, name } = event.target;
+    //if ([name] === "id_funcao") value = parseInt(value, 10);
+
+    setMatPedido({
+      ...matPedido,
+      [name]: value,
+    });
+  }
 
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -40,54 +55,6 @@ export default function AdminPedidos(props) {
   const handleClose = () => {
     setOpen(false);
     props.recarregar()
-  };
-
-  const baseApiUrl = "https://teste-producao1.herokuapp.com";
-
-  function onChange(event) {
-    const { value, name } = event.target;
-    //if ([name] === "id_funcao") value = parseInt(value, 10);
-
-    setPedido({
-      ...pedido,
-      [name]: value,
-    });
-  }
-
-  useEffect(() => {
-    setPedido({
-      ...pedido,
-      data_entrega: agora(),
-      user_id: localStorage.getItem("usuario_id"),
-    });
-  }, []);
-
-  async function save() {
-    axios
-      .post(`${baseApiUrl}/pedidos`, pedido)
-      .then((res) => {
-        const novoPedido = [...props.pedidos, pedido];
-        props.setPedidos(novoPedido);
-        notify("success");
-        props.setPedidoAtual(pedido.numero) 
-      })
-      .catch((err) => {
-        notify("error");
-      });
-  }
-
-  const limpar = () => {
-    setPedido(estadoInicial);
-  };
-
-  const notify = (tipo) => {
-    if (tipo === "success") {
-      toast.success("Pedido cadastrado com sucesso!");
-    } else {
-      toast.error(
-        "Pedido não foi cadastrado! Verifique se o código já está em uso ou se todas as informações foram preenchidas"
-      );
-    }
   };
 
   const ITEM_HEIGHT = 48;
@@ -101,70 +68,94 @@ export default function AdminPedidos(props) {
     },
   };
 
-  const dia = new Date();
-  const agora = () => {
-    let dd = dia.getDate();
-    if (dd < 10) {
-      dd = "0" + dd;
+  async function loadMateriais() {
+    const url = `${baseApiUrl}/materiais`;
+    const data = await axios.get(url);
+    setMateriais(data.data);
+  }
+
+  async function save() {
+    const url = `${baseApiUrl}/material_pedidos`;
+    axios
+      .post(url, matPedido)
+      .then(()=> {
+        notify("success");
+        limpar()
+      })
+      .catch((err) => {
+        notify("error");
+      })
+  }
+
+  const notify = (tipo) => {
+    if (tipo === "success") {
+      toast.success("Material cadastrado com sucesso!");
+    } else {
+      toast.error(
+        "Material não foi cadastrado! Verifique se o código já está em uso ou se todas as informações foram preenchidas"
+      );
     }
-    let mm = dia.getMonth() + 1;
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-    let yy = dia.getFullYear();
-    let hoje = yy + "-" + mm + "-" + dd;
-    return hoje;
   };
+
+  const limpar = () => {
+    setMatPedido(estadoInicial);
+  };
+
+   useEffect(() => {
+    loadMateriais();
+    limpar();
+   
+    
+  }, []);
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box noValidate sx={{ flexGrow: 1 }}>
         <Grid container spacing={2} margin={3}>
           <Grid item xs={1}>
             <TextField
               fullWidth
               label="Número Pedido"
               variant="standard"
-              name="numero"
-              type="number"
-              onChange={onChange}
-              value={pedido.numero}
+              defaultValue={props.pedidoAtual}
+              InputProps={{readOnly: true,}}
+              
             ></TextField>
           </Grid>
           <Grid item xs={4}>
-            <InputLabel id="demo-mutiple-name-label">Cliente</InputLabel>
+            <InputLabel id="demo-mutiple-name-label">Material</InputLabel>
             <Select
               fullWidth
               labelId="demo-mutiple-name-label"
-              name="cliente_id"
-              value={pedido.cliente_id}
+              name="material_id"
+              value={matPedido.material_id}
               onChange={onChange}
               input={<Input />}
               MenuProps={MenuProps}
             >
-              {props.clientes.map((name) => (
-                <MenuItem key={name.id} value={name.id}>
-                  {name.name}
+              {materiais.map((name) => (
+                <MenuItem key={name.codigo} value={name.codigo}>
+                  {name.nome}
                 </MenuItem>
               ))}
             </Select>
+            
           </Grid>
           <Grid item xs={1.5}>
             <Button variant="contained" aria-label="outlined primary button" onClick={handleClickOpen}>
-              Novo Cliente
+              Novo Material
             </Button>
           </Grid>
 
           <Grid item xs={2}>
             <TextField
               fullWidth
-              label="Data de entrega"
+              label="Quantidade"
               variant="standard"
-              defaultValue={pedido.data_entrega}
-              type="date"
-              name="data_entrega"
+              name="quantidade"
+              type="number"
               onChange={onChange}
-              value={pedido.data_entrega}
+              value={matPedido.quantidade}
             ></TextField>
           </Grid>
           <Grid container justifyContent="flex-end" item xs={2.5}>
@@ -172,21 +163,21 @@ export default function AdminPedidos(props) {
               variant="contained"
               aria-label="outlined primary button group"
             >
-              <Button onClick={save}>Salvar</Button>
-              <Button onClick={limpar}>Cancelar</Button>
+              <Button onClick={() => save()}>Salvar</Button>
+              <Button onClick={''}>Cancelar</Button>
               <Button>Editar</Button>
             </ButtonGroup>
           </Grid>
         </Grid>
       </Box>
+      
       <ToastContainer />
-
 
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" 
       maxWidth={"md"}>
         <DialogTitle id="form-dialog-title">Cadastro de Clientes</DialogTitle>
         <DialogContent >
-          <AdminClientes />
+          <AdminMateriais />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
@@ -194,6 +185,9 @@ export default function AdminPedidos(props) {
           </Button>
         </DialogActions>
       </Dialog>
+     
     </>
   );
-}
+};
+
+export default MatPedidos;
