@@ -8,7 +8,7 @@ const Clientes = () => {
   const [clientes, setClientes] = useState([]);
 
   async function loadClientes() {
-    let baseApiUrl = "https://teste-backend-gb.herokuapp.com";
+    let baseApiUrl = "'https://teste-producao1.herokuapp.com'";
     const url = `${baseApiUrl}/clientes`;
     const data = await axios.get(url);
     setClientes(data.data);

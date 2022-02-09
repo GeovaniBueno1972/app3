@@ -30,18 +30,20 @@ export default function AdminClientes(props) {
     });
   }
 
-  async function save(){
+  async function saveCliente(){
     let codigo = parseInt(cliente.id, 10);
     setCliente({'id': codigo, 'name': cliente.name, 'fone': cliente.fone, 'bairro':cliente.bairro})
     axios.post(`${baseApiUrl}/clientes`, cliente)
     .then((res) => {
-            notify('success')
-            const novoCliente = [...props.clientes, cliente]
-            props.setClientes(novoCliente)
+          console.log(res.status)
+            toast.success('Cliente cadastrado com sucesso!');
+            //const novoCliente = [...props.clientes, cliente]
+            //props.setClientes(novoCliente)
           }
           )
     .catch((err) => {
-      notify('error')      
+      console.log(err)
+      toast.error('Cliente não foi cadastrado! Verifique se o código já está em uso ou se todas as informações foram preenchidas')     
     })    
    
       
@@ -49,14 +51,7 @@ export default function AdminClientes(props) {
 
   const limpar = () => {setCliente(estadoInicial)}
 
-  const notify = (tipo) => {
-    if(tipo === 'success'){
-      toast.success('Usuário cadastrado com sucesso!');
-    }else {
-      toast.error('Usuário não foi cadastrado! Verifique se o código já está em uso ou se todas as informações foram preenchidas')
-    }
-}
-    
+      
 
   return (
     <>
@@ -108,8 +103,8 @@ export default function AdminClientes(props) {
             variant="contained"
             aria-label="outlined primary button group"
           >
-            <Button onClick={save}>Salvar</Button>
-            <Button onClick={limpar}>Cancelar</Button>
+            <Button onClick={() => saveCliente()}>Salvar</Button>
+            <Button onClick={() => limpar()}>Cancelar</Button>
             <Button>Editar</Button>
           </ButtonGroup>
         </Grid>

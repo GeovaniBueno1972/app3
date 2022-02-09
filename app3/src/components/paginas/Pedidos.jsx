@@ -10,7 +10,7 @@ const Pedidos = () => {
   const [clientes, setClientes] = useState([]);
   const [pedidoAtual, setPedidoAtual] = useState('');
 
-  const baseApiUrl = "https://teste-backend-gb.herokuapp.com";
+  const baseApiUrl = "'https://teste-producao1.herokuapp.com'";
 
   async function loadPedidos() {
     const url = `${baseApiUrl}/users`;

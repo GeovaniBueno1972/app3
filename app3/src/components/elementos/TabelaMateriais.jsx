@@ -71,7 +71,7 @@ export default function TabelaMateriais(props) {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  {columns.map((column) => (
+                  {[...columns, {id:"acao", label: "", minWidth:100}].map((column) => (
                     <TableCell
                       key={column.id}
                       style={{ minWidth: column.minWidth }}

@@ -8,7 +8,7 @@ const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
 
   async function loadUsuarios() {
-    let baseApiUrl = "https://teste-backend-gb.herokuapp.com";
+    let baseApiUrl = "'https://teste-producao1.herokuapp.com'";
     const url = `${baseApiUrl}/users`;
     const data = await axios.get(url);
     setUsuarios(data.data);

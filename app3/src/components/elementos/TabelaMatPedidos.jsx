@@ -15,22 +15,25 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function TabelaClientes(props) {
+export default function TabelaMatPedidos(props) {
   const theme = useTheme();
+
+  const baseApiUrl = "https://teste-producao1.herokuapp.com";
 
   const themeWithLocale = React.useMemo(() =>
     createTheme(theme, locales["ptBR"])
   );
 
+ 
   const columns = [
-    { id: "id", label: "ID", minWidth: 20 },
-    { id: "name", label: "Nome", minWidth: 100 },
-    { id: "fone", label: "Fone", minWidth: 170 },
-    { id: "bairro", label: "Bairro", minWidth: 170 },
+    { id: "nome", label: "Nome", minWidth: 100 },
+    { id: "quantidade", label: "Qtd", minWidth: 15 },
+    { id: "unidade", label: "Und", minWidth: 15},
   ];
 
   const [page, setPagina] = React.useState(0);
   const [rowsPerPage, setLinhasPorPagina] = React.useState(10);
+  
 
   const handleChangePagina = (event, newPage) => {
     setPagina(newPage);
@@ -41,12 +44,12 @@ export default function TabelaClientes(props) {
     setPagina(0);
   };
 
-  function remove(cliente) {
-    console.log(cliente);
-    const baseApiUrl = "https://teste-producao1.herokuapp.com";
-    const id = cliente.id;
+  
+  function remove(material) {
+    console.log(material);
+    const id = material.id;
     axios
-      .delete(`${baseApiUrl}/clientes/${id}`)
+      .delete(`${baseApiUrl}/material_pedidos/${id}`)
       .then(() => {
         notify("success");
         props.recarregar()
@@ -62,7 +65,7 @@ export default function TabelaClientes(props) {
     }
   };
 
-  const rows = props.clientes;
+  const rows = props.listaMatPedido;
 
   return (
     <>
@@ -72,7 +75,7 @@ export default function TabelaClientes(props) {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  {columns.map((column) => (
+                  {[...columns, {id:"acao", label: "", minWidth:100}].map((column) => (
                     <TableCell
                       key={column.id}
                       style={{ minWidth: column.minWidth }}
@@ -113,7 +116,7 @@ export default function TabelaClientes(props) {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={props.clientes.length}
+            count={props.listaMatPedido.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePagina}

@@ -26,7 +26,7 @@ import MatPedidos from './MatPedidos'
 export default function AdminPedidos(props) {
   const estadoInicial = {
     numero: 0,
-    cliente_id: 0,
+    cliente_id: "",
     estado: "Aguardando",
   };
 
@@ -128,7 +128,7 @@ export default function AdminPedidos(props) {
               name="numero"
               type="number"
               onChange={onChange}
-              value={pedido.numero}
+              value={pedido.numero ?? ""}
             ></TextField>
           </Grid>
           <Grid item xs={4}>
@@ -137,7 +137,7 @@ export default function AdminPedidos(props) {
               fullWidth
               labelId="demo-mutiple-name-label"
               name="cliente_id"
-              value={pedido.cliente_id}
+              value={pedido.cliente_id ?? ""}
               onChange={onChange}
               input={<Input />}
               MenuProps={MenuProps}
@@ -172,8 +172,8 @@ export default function AdminPedidos(props) {
               variant="contained"
               aria-label="outlined primary button group"
             >
-              <Button onClick={save}>Salvar</Button>
-              <Button onClick={limpar}>Cancelar</Button>
+              <Button onClick={() => save()}>Salvar</Button>
+              <Button onClick={() => limpar()}>Cancelar</Button>
               <Button>Editar</Button>
             </ButtonGroup>
           </Grid>
@@ -186,7 +186,7 @@ export default function AdminPedidos(props) {
       maxWidth={"md"}>
         <DialogTitle id="form-dialog-title">Cadastro de Clientes</DialogTitle>
         <DialogContent >
-          <AdminClientes />
+          <AdminClientes clientes={props.clientes} setClientes={props.setClientes}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

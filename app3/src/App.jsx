@@ -3,6 +3,7 @@ import Materiais from './components/paginas/Materiais'
 import Usuarios from './components/paginas/Usuarios'
 import Pedidos from './components/paginas/Pedidos'
 import Clientes from './components/paginas/Clientes'
+import Home from './components/paginas/Home'
 
 import Login from "../src/components/auth/Login"
 
@@ -13,7 +14,7 @@ export function App() {
     <div className="App">
       <header>
         <Link to="./login">Login</Link>
-        <Link to="/">Home</Link>
+        <Link to="./home">Home</Link>
         <Link to="./materiais">Materiais</Link>
         <Link to="./usuarios">Usuários</Link>
         <Link to="./pedidos">Pedidos</Link>
@@ -21,6 +22,7 @@ export function App() {
       </header>
       <main>
         <Switch>
+          <Route path="/home" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/materiais" component={Materiais}/>
           <Route path="/usuarios" component={Usuarios}/>

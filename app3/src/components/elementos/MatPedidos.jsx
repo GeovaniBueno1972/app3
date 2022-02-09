@@ -21,6 +21,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import AdminMateriais from '../elementos/AdminMateriais'
+import TabelaMatPedidos from './TabelaMatPedidos'
 
 
 const MatPedidos = (props) => {
@@ -29,6 +30,7 @@ const MatPedidos = (props) => {
 
   const [matPedido, setMatPedido] = useState([]);
   const [materiais, setMateriais] = useState([]);
+  const [listaMatPedido, setListaMatPedido] = React.useState([])
 
   const estadoInicial = {
     pedido_numero: props.pedidoAtual,
@@ -54,7 +56,7 @@ const MatPedidos = (props) => {
 
   const handleClose = () => {
     setOpen(false);
-    props.recarregar()
+    loadMateriais()
   };
 
   const ITEM_HEIGHT = 48;
@@ -74,6 +76,16 @@ const MatPedidos = (props) => {
     setMateriais(data.data);
   }
 
+  async function loadMatPed(){
+    const id = `${props.pedidoAtual}`
+    console.log(id)
+    const url = `${baseApiUrl}/materialpedidos/${id}`
+    const matPed = await axios.get(url)
+    setListaMatPedido(matPed.data);
+    console.log(matPed.data)
+
+  }
+
   async function save() {
     const url = `${baseApiUrl}/material_pedidos`;
     axios
@@ -81,6 +93,7 @@ const MatPedidos = (props) => {
       .then(()=> {
         notify("success");
         limpar()
+        loadMatPed()
       })
       .catch((err) => {
         notify("error");
@@ -112,23 +125,14 @@ const MatPedidos = (props) => {
     <>
       <Box noValidate sx={{ flexGrow: 1 }}>
         <Grid container spacing={2} margin={3}>
-          <Grid item xs={1}>
-            <TextField
-              fullWidth
-              label="Número Pedido"
-              variant="standard"
-              defaultValue={props.pedidoAtual}
-              InputProps={{readOnly: true,}}
-              
-            ></TextField>
-          </Grid>
-          <Grid item xs={4}>
+          
+          <Grid item xs={5}>
             <InputLabel id="demo-mutiple-name-label">Material</InputLabel>
             <Select
               fullWidth
               labelId="demo-mutiple-name-label"
               name="material_id"
-              value={matPedido.material_id}
+              value={matPedido.material_id ?? ""}
               onChange={onChange}
               input={<Input />}
               MenuProps={MenuProps}
@@ -164,18 +168,21 @@ const MatPedidos = (props) => {
               aria-label="outlined primary button group"
             >
               <Button onClick={() => save()}>Salvar</Button>
-              <Button onClick={''}>Cancelar</Button>
+              <Button onClick={()=> limpar()}>Cancelar</Button>
               <Button>Editar</Button>
             </ButtonGroup>
           </Grid>
         </Grid>
       </Box>
+      <hr />
+      <TabelaMatPedidos pedidoAtual={matPedido.pedido_numero} listaMatPedido={listaMatPedido}
+      recarregar={loadMatPed}/>
       
       <ToastContainer />
 
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" 
       maxWidth={"md"}>
-        <DialogTitle id="form-dialog-title">Cadastro de Clientes</DialogTitle>
+        <DialogTitle id="form-dialog-title">Cadastro de Materiais</DialogTitle>
         <DialogContent >
           <AdminMateriais />
         </DialogContent>

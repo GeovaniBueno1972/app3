@@ -116,8 +116,8 @@ export default function AdminMateriais(props) {
               variant="contained"
               aria-label="outlined primary button group"
             >
-              <Button onClick={save}>Salvar</Button>
-              <Button onClick={limpar}>Cancelar</Button>
+              <Button onClick={() => save()}>Salvar</Button>
+              <Button onClick={() => limpar()}>Cancelar</Button>
               <Button>Editar</Button>
             </ButtonGroup>
           </Grid>
