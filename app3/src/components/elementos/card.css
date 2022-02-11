@@ -1,0 +1,5 @@
+.box-config{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+}

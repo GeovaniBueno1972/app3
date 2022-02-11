@@ -42,7 +42,7 @@ export default function TabelaMateriais(props) {
 
   function remove(material) {
     console.log(material);
-    const baseApiUrl = "https://teste-producao1.herokuapp.com";
+    const baseApiUrl = 'https://teste-producao1.herokuapp.com';
     const id = material.codigo;
     axios
       .delete(`${baseApiUrl}/materiais/${id}`)

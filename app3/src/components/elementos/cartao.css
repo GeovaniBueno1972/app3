@@ -1,0 +1,18 @@
+.card-content{
+    padding: 5px;
+    margin: 0px;
+}
+
+#num-pedido{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#cliente-pedido{
+    font-size: 1.3em;
+}
+
+#data-pedido{
+    font-size: 1.2em;
+    font-weight: bold;
+}

@@ -186,7 +186,7 @@ export default function AdminPedidos(props) {
       maxWidth={"md"}>
         <DialogTitle id="form-dialog-title">Cadastro de Clientes</DialogTitle>
         <DialogContent >
-          <AdminClientes clientes={props.clientes} setClientes={props.setClientes}/>
+          <AdminClientes />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

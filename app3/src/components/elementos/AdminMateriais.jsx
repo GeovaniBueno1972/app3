@@ -40,21 +40,20 @@ export default function AdminMateriais(props) {
       nome: material.nome,
       unidade: material.unidade,
     });
-    await axios
+    axios
       .post(`${baseApiUrl}/materiais`, material)
       .then((res) => {
-        status = res.status;
-        const novoMaterial = [...props.materiais, material];
-        props.setMateriais(novoMaterial);
+        notify("success");
+        if (props.materiais){
+          const novoMaterial = [...props.materiais, material];
+          props.setMateriais(novoMaterial);
+        }
       })
       .catch((err) => {
-        status = err.status;
+         notify("error");
+        
       });
-    if (status === 204) {
-      notify("success");
-    } else {
-      notify("error");
-    }
+    
   }
 
   const limpar = () => {

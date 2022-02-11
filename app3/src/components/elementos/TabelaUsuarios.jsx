@@ -41,7 +41,7 @@ export default function TabelaUsuarios(props) {
 
   function remove(usuario) {
     console.log(usuario);
-    const baseApiUrl = "https://teste-producao1.herokuapp.com";
+    const baseApiUrl = 'https://teste-producao1.herokuapp.com';
     const id = usuario.id;
     axios
       .delete(`${baseApiUrl}/users/${id}`)

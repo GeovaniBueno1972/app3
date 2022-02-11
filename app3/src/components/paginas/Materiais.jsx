@@ -8,7 +8,7 @@ const Materiais = () => {
   const [materiais, setMateriais] = useState([]);
 
   async function loadMateriais() {
-    let baseApiUrl = "'https://teste-producao1.herokuapp.com'";
+    let baseApiUrl = 'https://teste-producao1.herokuapp.com';
     const url = `${baseApiUrl}/materiais`;
     const data = await axios.get(url);
     setMateriais(data.data);
