@@ -11,13 +11,30 @@ export default function Card() {
   const [pedidos, setPedidos] = useState([]);
 
   const hoje = new Date(now());
+  const datas = {}
 
   const baseApiUrl = "https://teste-producao1.herokuapp.com";
 
-  async function loadPedidos() {
-    const url = `${baseApiUrl}/pedidos`;
-    const data = await axios.get(url);
-    setPedidos(data.data);
+  // async function loadPedidos() {
+  //   const url = `${baseApiUrl}/pedidos`;
+  //   const data = await axios.get(url);
+  //   setPedidos(data.data);
+  // }
+
+  function datasPadrao(){
+    let dataMenos = new Date()
+    let dataMais = new Date()
+    dataMenos.setDate(hoje.getDate()-5)
+    dataMais.setDate(hoje.getDate()+20)
+    datas.data_ini = dataMenos
+    datas.data_fin = dataMais
+}
+
+  async function loadPesquisa(){
+    datasPadrao()
+    const url = `${baseApiUrl}/pedidos_pesquisa`;
+    const data = await axios.post(url, datas)
+    setPedidos(data.data)
   }
 
   function ajustarDatas() {
@@ -30,44 +47,15 @@ export default function Card() {
     }
   }
 
-  function renderizar() {
-    for (let index = 0; index < dia.length; index++) {
-      return (
-        <Paper elevation={3}>
-          <div>
-            Data {dia[index]}
-            {pedidos.map((pedido) => {
-              let data = convertData(pedido.data_entrega);
-              const igual = data === dia[index];
-              return (
-                <div>
-                  {igual ? (
-                    <div>
-                      <Cartao pedido={pedido} />
-                      <br />
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </Paper>
-      );
-    }
-  }
 
   function convertData(dataInput) {
     let data = new Date(dataInput);
-    let data1 = new Date();
-    data1.setDate(data.getDate());
-    let dataFormatada = data1.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+    let dataFormatada = data.toLocaleDateString("pt-BR", { timeZone: "UTC" });
     return dataFormatada;
   }
 
   React.useEffect(() => {
-    loadPedidos();
+    loadPesquisa();
     ajustarDatas();
     console.log(hoje);
   }, [dia]);
