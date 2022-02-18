@@ -6,20 +6,28 @@ import axios from "axios";
 import { now } from "moment";
 import "./card.css";
 
+var load = false
+
+function recarregar(){
+  console.log(load)
+    load = true;
+  console.log(load)
+
+}
+
 export default function Card() {
   const [dia, setDia] = useState(["", "", "", "", "", ""]);
   const [pedidos, setPedidos] = useState([]);
+  const [recarrega, setRecarrega] = useState(load)
 
   const hoje = new Date(now());
   const datas = {}
 
+  
+
   const baseApiUrl = "https://teste-producao1.herokuapp.com";
 
-  // async function loadPedidos() {
-  //   const url = `${baseApiUrl}/pedidos`;
-  //   const data = await axios.get(url);
-  //   setPedidos(data.data);
-  // }
+ 
 
   function datasPadrao(){
     let dataMenos = new Date()
@@ -58,7 +66,7 @@ export default function Card() {
     loadPesquisa();
     ajustarDatas();
     console.log(hoje);
-  }, [dia]);
+  }, [load]);
 
   return (
     <>
@@ -79,7 +87,7 @@ export default function Card() {
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
               const igual = data === dia[0];
-              return <div>{igual ? <Cartao pedido={pedido} /> : ""}</div>;
+              return <div>{igual ? <Cartao pedido={pedido} recarrega={setRecarrega} /> : ""}</div>;
             })}
           </div>
         </Paper>
@@ -89,7 +97,7 @@ export default function Card() {
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
               const igual = data === dia[1];
-              return <div>{igual ? <Cartao pedido={pedido} /> : ""}</div>;
+              return <div>{igual ? <Cartao pedido={pedido} recarrega={setRecarrega}/> : ""}</div>;
             })}
           </div>
         </Paper>
@@ -99,7 +107,7 @@ export default function Card() {
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
               const igual = data === dia[2];
-              return <div>{igual ? <Cartao pedido={pedido} /> : ""}</div>;
+              return <div>{igual ? <Cartao pedido={pedido} recarrega={setRecarrega} /> : ""}</div>;
             })}
           </div>
         </Paper>
@@ -109,7 +117,7 @@ export default function Card() {
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
               const igual = data === dia[3];
-              return <div>{igual ? <Cartao pedido={pedido} /> : ""}</div>;
+              return <div>{igual ? <Cartao pedido={pedido} recarrega={setRecarrega} /> : ""}</div>;
             })}
           </div>
         </Paper>
@@ -119,7 +127,7 @@ export default function Card() {
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
               const igual = data === dia[4];
-              return <div>{igual ? <Cartao pedido={pedido} /> : ""}</div>;
+              return <div>{igual ? <Cartao pedido={pedido} recarrega={setRecarrega} /> : ""}</div>;
             })}
           </div>
         </Paper>
@@ -133,7 +141,7 @@ export default function Card() {
                 <div>
                   {igual ? (
                     <div>
-                      <Cartao pedido={pedido} />
+                      <Cartao pedido={pedido} recarrega={setRecarrega} />
                       <br />
                     </div>
                   ) : (
@@ -148,3 +156,5 @@ export default function Card() {
     </>
   );
 }
+
+export {recarregar}

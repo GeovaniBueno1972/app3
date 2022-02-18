@@ -6,6 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
+import ParaProducao from './ParaProducao'
 
 import "./cartao.css";
 
@@ -14,7 +15,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 600,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -27,6 +28,11 @@ export default function Cartao(props) {
   const baseApiUrl = "https://teste-producao1.herokuapp.com";
 
   const [produtos, setProdutos] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [prod, setProd] = useState(false);
+
+
+  const numero = props.pedido.numero
 
   async function loadProdutos() {
     let id = props.pedido.numero;
@@ -35,15 +41,19 @@ export default function Cartao(props) {
     setProdutos(data.data);
   }
 
+  const producao = ()=> { 
+    setProd(true)
+  }
+
   useEffect(() => {
     loadProdutos();
-  }, []);
+  }, [prod]);
 
   const estado= ()=>{
     let estado = props.pedido.estado
     if ((estado === 'Aguardando') || (estado === 'Pendencia')){
       return(
-        <Button size="small" onClick={() => handleOpen()}>
+        <Button size="small" onClick={() => producao()}>
         Para Produção
       </Button>
       )
@@ -57,7 +67,7 @@ export default function Cartao(props) {
   }
 
 
-  const [open, setOpen] = useState(false);
+  
 
   const handleOpen = () => {
     setOpen(true);
@@ -65,8 +75,10 @@ export default function Cartao(props) {
 
   const handleClose = () => {
     setOpen(false);
+    setProd(false)
   };
 
+  
   function convertData(dataInput) {
     let data = new Date(dataInput);
     let dataFormatada = data.toLocaleDateString("pt-BR", { timeZone: "UTC" });
@@ -177,7 +189,7 @@ export default function Cartao(props) {
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <Box sx={{ ...style, width: 400 }}>
+        <Box sx={{ ...style, width: 600 }}>
           <h2 id="parent-modal-title">Pedido: {props.pedido.numero}</h2>
           <p id="parent-modal-description">Cliente: {props.pedido.cliente}</p>
           <p id="parent-modal-description">Estado: {props.pedido.estado}</p>
@@ -196,7 +208,7 @@ export default function Cartao(props) {
           <div>
             <hr />
             {estado()}
-
+            {prod ? <ParaProducao pedido={numero} recarregar={props.recarrega()} setProd={setProd} fechar={handleClose}/> : ''}
           </div>
         </Box>
       </Modal>
