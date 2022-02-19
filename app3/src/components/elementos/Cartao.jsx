@@ -31,6 +31,8 @@ export default function Cartao(props) {
   const [open, setOpen] = useState(false);
   const [prod, setProd] = useState(false);
 
+  
+
 
   const numero = props.pedido.numero
 
@@ -45,9 +47,13 @@ export default function Cartao(props) {
     setProd(true)
   }
 
+  const enviar = ()=> { 
+    props.flag()
+  }
+
   useEffect(() => {
     loadProdutos();
-  }, [prod]);
+  }, []);
 
   const estado= ()=>{
     let estado = props.pedido.estado
@@ -76,7 +82,11 @@ export default function Cartao(props) {
   const handleClose = () => {
     setOpen(false);
     setProd(false)
+    enviar()
+    nova()
   };
+
+  
 
   
   function convertData(dataInput) {
@@ -85,133 +95,145 @@ export default function Cartao(props) {
     return dataFormatada;
   }
 
-  return (
+  const nova = ()=> {
+    console.log('Carregou o cartão')
+    return (
+      <>
+       
+        <div>
+          {props.pedido.estado === "Aguardando" ? (
+            <div>
+              
+              <Card sx={{ maxWidth: 250, backgroundColor: "#ccc" }}>
+                <CardContent className="card-content">
+                  <div id="num-pedido">{props.pedido.numero}</div>
+                  <div id="cliente-pedido">{props.pedido.cliente}</div>
+                  <div id="data-pedido">
+                    {convertData(props.pedido.data_entrega)}
+                  </div>
+                </CardContent>
+                <CardActions>
+                  <Button size="small" onClick={() => handleOpen()}>
+                    Mais Informações
+                  </Button>
+                </CardActions>
+              </Card>
+              <br />
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+  
+        <div>
+          {props.pedido.estado === "Producao" ? (
+            <div>
+              <Card sx={{ maxWidth: 250, backgroundColor: "#00BFFF" }}>
+                <CardContent className="card-content">
+                  <div id="num-pedido">{props.pedido.numero}</div>
+                  <div id="cliente-pedido">{props.pedido.cliente}</div>
+                  <div id="data-pedido">
+                    {convertData(props.pedido.data_entrega)}
+                  </div>
+                </CardContent>
+                <CardActions>
+                  <Button size="small" onClick={() => handleOpen()}>
+                    Mais Informações
+                  </Button>
+                </CardActions>
+              </Card>
+              <br />
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+  
+        <div>
+          {props.pedido.estado === "Pendencia" ? (
+            <div>
+              <Card sx={{ maxWidth: 250, backgroundColor: "#F4A460" }}>
+                <CardContent className="card-content">
+                  <div id="num-pedido">{props.pedido.numero}</div>
+                  <div id="cliente-pedido">{props.pedido.cliente}</div>
+                  <div id="data-pedido">
+                    {convertData(props.pedido.data_entrega)}
+                  </div>
+                </CardContent>
+                <CardActions>
+                  <Button size="small" onClick={() => handleOpen()}>
+                    Mais Informações
+                  </Button>
+                </CardActions>
+              </Card>
+              <br />
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+  
+        <div>
+          {props.pedido.estado === "Concluido" ? (
+            <div>
+              <Card sx={{ maxWidth: 250, backgroundColor: "#0F0" }}>
+                <CardContent className="card-content">
+                  <div id="num-pedido">{props.pedido.numero}</div>
+                  <div id="cliente-pedido">{props.pedido.cliente}</div>
+                  <div id="data-pedido">
+                    {convertData(props.pedido.data_entrega)}
+                  </div>
+                </CardContent>
+                <CardActions>
+                  <Button size="small" onClick={() => handleOpen()}>
+                    Mais Informações
+                  </Button>
+                </CardActions>
+              </Card>
+              <br />
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+  
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="parent-modal-title"
+          aria-describedby="parent-modal-description"
+        >
+          <Box sx={{ ...style, width: 600 }}>
+            <h2 id="parent-modal-title">Pedido: {props.pedido.numero}</h2>
+            <p id="parent-modal-description">Cliente: {props.pedido.cliente}</p>
+            <p id="parent-modal-description">Estado: {props.pedido.estado}</p>
+            <p id="parent-modal-description">Itens do pedido:</p>
+            <ul>
+              {produtos.map((produtos) => {
+                return (
+                  <div key={produtos.id}>
+                    <li>
+                      {produtos.quantidade} - {produtos.unidade} - {produtos.nome}
+                    </li>
+                  </div>
+                );
+              })}
+            </ul>
+            <div>
+              <hr />
+              {estado()}
+              {prod ? <ParaProducao pedido={numero}  setProd={setProd} fechar={handleClose}/> : ''}
+            </div>
+          </Box>
+        </Modal>
+      </>
+    );
+  }
+
+  return(
     <>
-      <div>
-        {props.pedido.estado === "Aguardando" ? (
-          <div>
-            <Card sx={{ maxWidth: 250, backgroundColor: "#ccc" }}>
-              <CardContent className="card-content">
-                <div id="num-pedido">{props.pedido.numero}</div>
-                <div id="cliente-pedido">{props.pedido.cliente}</div>
-                <div id="data-pedido">
-                  {convertData(props.pedido.data_entrega)}
-                </div>
-              </CardContent>
-              <CardActions>
-                <Button size="small" onClick={() => handleOpen()}>
-                  Mais Informações
-                </Button>
-              </CardActions>
-            </Card>
-            <br />
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
-
-      <div>
-        {props.pedido.estado === "Producao" ? (
-          <div>
-            <Card sx={{ maxWidth: 250, backgroundColor: "#00BFFF" }}>
-              <CardContent className="card-content">
-                <div id="num-pedido">{props.pedido.numero}</div>
-                <div id="cliente-pedido">{props.pedido.cliente}</div>
-                <div id="data-pedido">
-                  {convertData(props.pedido.data_entrega)}
-                </div>
-              </CardContent>
-              <CardActions>
-                <Button size="small" onClick={() => handleOpen()}>
-                  Mais Informações
-                </Button>
-              </CardActions>
-            </Card>
-            <br />
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
-
-      <div>
-        {props.pedido.estado === "Pendencia" ? (
-          <div>
-            <Card sx={{ maxWidth: 250, backgroundColor: "#F4A460" }}>
-              <CardContent className="card-content">
-                <div id="num-pedido">{props.pedido.numero}</div>
-                <div id="cliente-pedido">{props.pedido.cliente}</div>
-                <div id="data-pedido">
-                  {convertData(props.pedido.data_entrega)}
-                </div>
-              </CardContent>
-              <CardActions>
-                <Button size="small" onClick={() => handleOpen()}>
-                  Mais Informações
-                </Button>
-              </CardActions>
-            </Card>
-            <br />
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
-
-      <div>
-        {props.pedido.estado === "Concluido" ? (
-          <div>
-            <Card sx={{ maxWidth: 250, backgroundColor: "#0F0" }}>
-              <CardContent className="card-content">
-                <div id="num-pedido">{props.pedido.numero}</div>
-                <div id="cliente-pedido">{props.pedido.cliente}</div>
-                <div id="data-pedido">
-                  {convertData(props.pedido.data_entrega)}
-                </div>
-              </CardContent>
-              <CardActions>
-                <Button size="small" onClick={() => handleOpen()}>
-                  Mais Informações
-                </Button>
-              </CardActions>
-            </Card>
-            <br />
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
-        <Box sx={{ ...style, width: 600 }}>
-          <h2 id="parent-modal-title">Pedido: {props.pedido.numero}</h2>
-          <p id="parent-modal-description">Cliente: {props.pedido.cliente}</p>
-          <p id="parent-modal-description">Estado: {props.pedido.estado}</p>
-          <p id="parent-modal-description">Itens do pedido:</p>
-          <ul>
-            {produtos.map((produtos) => {
-              return (
-                <div key={produtos.id}>
-                  <li>
-                    {produtos.quantidade} - {produtos.unidade} - {produtos.nome}
-                  </li>
-                </div>
-              );
-            })}
-          </ul>
-          <div>
-            <hr />
-            {estado()}
-            {prod ? <ParaProducao pedido={numero} recarregar={props.recarrega()} setProd={setProd} fechar={handleClose}/> : ''}
-          </div>
-        </Box>
-      </Modal>
+      {nova()}
     </>
-  );
+  )
+  
 }

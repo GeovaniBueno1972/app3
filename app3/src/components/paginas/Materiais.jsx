@@ -12,7 +12,6 @@ const Materiais = () => {
     const url = `${baseApiUrl}/materiais`;
     const data = await axios.get(url);
     setMateriais(data.data);
-    console.log(data.data);
   }
 
   useEffect(() => {

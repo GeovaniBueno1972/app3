@@ -34,6 +34,7 @@ const Paraproducao = (props) => {
     pedido_numero: props.pedido
   };
 
+  
   const [operadores, setOperadores] = useState([]);
   const [pedido, setPedido] = useState(estadoInicial);
 
@@ -54,6 +55,8 @@ const Paraproducao = (props) => {
     });
   }
 
+  
+
   useEffect(() => {
     loadOperadores();
     console.log(props.pedido);
@@ -62,32 +65,13 @@ const Paraproducao = (props) => {
   async function save() {
     console.log(pedido)
     let id = pedido.pedido_numero
+    let insPedido = await axios.put(`${baseApiUrl}/pedidos_producao/${id}`)
+    
     const data = await axios.post(`${baseApiUrl}/producao`, pedido)
-    console.log(data.status);
-    notify("success");
-    if (data.status === 204){
-      console.log('aqui')
-      notify("success");
-      
-
-    }else{
-      notify("error")
-    }
-    await axios.put(`${baseApiUrl}/pedidos_producao/${id}`)
+        
   }
 
-  const notify = (tipo) => {
-    console.log(tipo)
-    if (tipo === "success") {
-      toast.success("Pedido cadastrado para Produção!");
-      props.setProd(false)
-      props.fechar()
-    } else {
-      toast.error(
-        "Erro ao alterar o estado do pedido"
-      );
-    }
-  };
+  
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -141,10 +125,11 @@ const Paraproducao = (props) => {
               aria-label="outlined primary button group"
             >
               <Button onClick={() => save()}>Salvar</Button>
-              <Button onClick={""}>Cancelar</Button>
+              <Button onClick={''}>Cancelar</Button>
             </ButtonGroup>
           </Grid>
         </Grid>
+        
         {pedido.data_ini_producao} ----
         {pedido.user_id} ---- {pedido.pedido_numero}
       </Box>
