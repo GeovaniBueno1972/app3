@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import { ToastContainer, toast } from "react-toastify";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { TextField } from "@mui/material";
@@ -129,11 +128,7 @@ const Paraproducao = (props) => {
             </ButtonGroup>
           </Grid>
         </Grid>
-        
-        {pedido.data_ini_producao} ----
-        {pedido.user_id} ---- {pedido.pedido_numero}
       </Box>
-      <ToastContainer />
     </>
   );
 };

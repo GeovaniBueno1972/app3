@@ -30,7 +30,8 @@ export default function Cartao(props) {
   const [produtos, setProdutos] = useState([]);
   const [open, setOpen] = useState(false);
   const [prod, setProd] = useState(false);
-
+  const [concluidos, setConcluidos] = useState([]);
+  const [concl, SetConcl] = useState(false);
   
 
 
@@ -43,17 +44,34 @@ export default function Cartao(props) {
     setProdutos(data.data);
   }
 
+  async function loadConcluidos() {
+    let id = props.pedido.numero;
+    let url = `${baseApiUrl}/producao/${id}`;
+    const data = await axios.get(url);
+    setConcluidos(data.data)
+  }
+
   const producao = ()=> { 
     setProd(true)
   }
 
+  const conclusao = ()=> {
+    SetConcl(true)
+    concluir()
+    loadConcluidos()
+  }
+
+  
   const enviar = ()=> { 
     props.flag()
   }
 
   useEffect(() => {
     loadProdutos();
+    loadConcluidos()
   }, []);
+
+ 
 
   const estado= ()=>{
     let estado = props.pedido.estado
@@ -65,14 +83,21 @@ export default function Cartao(props) {
       )
     } else if (estado === 'Producao'){
       return(
-        <Button size="small" onClick={() => handleOpen()}>
+        <Button size="small" onClick={() => conclusao()}>
         Concluir Produção
       </Button>
       )
-    }
+      }else if (!concl){
+        conclusao();
+      }
   }
 
-
+  async function concluir(){
+    let url = `${baseApiUrl}/pedidos_concluido/${numero}`;
+    await axios.put(url)
+    let url2 = `${baseApiUrl}/concluido/${numero}`
+    await axios.put(url2)
+  }
   
 
   const handleOpen = () => {
@@ -82,8 +107,8 @@ export default function Cartao(props) {
   const handleClose = () => {
     setOpen(false);
     setProd(false)
-    enviar()
-    nova()
+    //enviar()
+    //nova()
   };
 
   
@@ -95,12 +120,9 @@ export default function Cartao(props) {
     return dataFormatada;
   }
 
-  const nova = ()=> {
-    console.log('Carregou o cartão')
-    return (
-      <>
-       
-        <div>
+  return(
+    <>
+    <div>
           {props.pedido.estado === "Aguardando" ? (
             <div>
               
@@ -222,18 +244,21 @@ export default function Cartao(props) {
             <div>
               <hr />
               {estado()}
+              
               {prod ? <ParaProducao pedido={numero}  setProd={setProd} fechar={handleClose}/> : ''}
+
+              {concl 
+              ? <div>
+                  <p>Data inicio da produção: {convertData(concluidos.data_ini_producao)}</p>
+                  <p>Operador: {concluidos.operador}</p>
+                  <p>Data conclusão da produção: {convertData(concluidos.data_conclusao)} </p>
+                </div>
+              : '' }
             </div>
           </Box>
         </Modal>
       </>
-    );
-  }
-
-  return(
-    <>
-      {nova()}
-    </>
+   
   )
   
 }
