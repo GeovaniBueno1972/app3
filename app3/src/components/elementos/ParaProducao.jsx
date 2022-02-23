@@ -9,24 +9,12 @@ import Grid from "@mui/material/Grid";
 import { TextField } from "@mui/material";
 import Input from "@material-ui/core/Input";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import {agora} from '../elementos/funcoes'
 
 
 const Paraproducao = (props) => {
   const dia = new Date();
-  const agora = () => {
-    let dd = dia.getDate();
-    if (dd < 10) {
-      dd = "0" + dd;
-    }
-    let mm = dia.getMonth() + 1;
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-    let yy = dia.getFullYear();
-    let hoje = yy + "-" + mm + "-" + dd;
-    return hoje;
-  };
-
+  
   const estadoInicial = {
     data_ini_producao: agora(),
     user_id: "",
@@ -58,7 +46,6 @@ const Paraproducao = (props) => {
 
   useEffect(() => {
     loadOperadores();
-    console.log(props.pedido);
   }, [pedido]);
 
   async function save() {
@@ -67,7 +54,8 @@ const Paraproducao = (props) => {
     let insPedido = await axios.put(`${baseApiUrl}/pedidos_producao/${id}`)
     
     const data = await axios.post(`${baseApiUrl}/producao`, pedido)
-        
+    
+    props.fechar()   
   }
 
   
