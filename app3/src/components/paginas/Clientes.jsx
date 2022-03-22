@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AdminClientes from "../elementos/AdminClientes";
-import TabelaCliente from "../elementos/TabelaClientes";
+import TabelaCliente from "../tabelas/TabelaClientes";
 
 const Clientes = () => {
   const [clientes, setClientes] = useState([]);

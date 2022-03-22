@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AdminMateriais from "../elementos/AdminMateriais";
-import TabelaMateriais from "../elementos/TabelaMateriais";
+import TabelaMateriais from "../tabelas/TabelaMateriais";
 
 const Materiais = () => {
   const [materiais, setMateriais] = useState([]);

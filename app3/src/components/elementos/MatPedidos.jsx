@@ -21,7 +21,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import AdminMateriais from '../elementos/AdminMateriais'
-import TabelaMatPedidos from './TabelaMatPedidos'
+import TabelaMatPedidos from '../tabelas/TabelaMatPedidos'
 
 
 const MatPedidos = (props) => {

@@ -27,7 +27,7 @@ const style = {
 
 export default function Cartao(props) {
   const baseApiUrl = "https://teste-producao1.herokuapp.com";
-  const numero = props.pedido.numero
+  const numero = props.pedido.numero;
   const [produtos, setProdutos] = useState([]);
   const [concluidos, setConcluidos] = useState([]);
   const [open, setOpen] = useState(false);
@@ -48,13 +48,13 @@ export default function Cartao(props) {
     setConcluidos(data.data);
   }
 
-  async function concluir(){
+  async function concluir() {
     let url = `${baseApiUrl}/pedidos_concluido/${numero}`;
-    await axios.put(url)
-    let url2 = `${baseApiUrl}/concluido/${numero}`
-    await axios.put(url2)
-    enviar()
-    props.novo()
+    await axios.put(url);
+    let url2 = `${baseApiUrl}/concluido/${numero}`;
+    await axios.put(url2);
+    enviar();
+    props.novo();
   }
 
   const handleOpen = () => {
@@ -63,22 +63,22 @@ export default function Cartao(props) {
 
   const handleClose = () => {
     setOpen(false);
-    props.novo()
+    props.novo();
   };
 
   const enviar = () => {
-    let pedido = props.pedido
-    let pedidoAlterado = {}
-    console.log(pedido)
-    if (pedido.estado === 'Aguardando'){
-      pedidoAlterado = {...pedido, estado: 'Producao'}
-    } else if (pedido.estado === 'Producao'){
-      pedidoAlterado = {...pedido, estado: 'Concluido'}
+    let pedido = props.pedido;
+    let pedidoAlterado = {};
+    console.log(pedido);
+    if (pedido.estado === "Aguardando") {
+      pedidoAlterado = { ...pedido, estado: "Producao" };
+    } else if (pedido.estado === "Producao") {
+      pedidoAlterado = { ...pedido, estado: "Concluido" };
     }
-     
-    console.log(pedidoAlterado)
-    props.setNovoPedido(pedidoAlterado)    
-  }
+
+    console.log(pedidoAlterado);
+    props.setNovoPedido(pedidoAlterado);
+  };
 
   useEffect(() => {
     console.log("Loading produtos");
@@ -86,12 +86,11 @@ export default function Cartao(props) {
     loadConcluidos();
     if (props.pedido.estado === "Concluido") {
       setFechado(true);
-    } else if (props.pedido.estado === "Aguardando"){
-      setAberto(true)
+    } else if (props.pedido.estado === "Aguardando") {
+      setAberto(true);
     }
   }, []);
 
-  
   return (
     <>
       <div>
@@ -110,7 +109,6 @@ export default function Cartao(props) {
                 <Button size="small" onClick={() => handleOpen()}>
                   Mais Informações
                 </Button>
-               
               </CardActions>
             </Card>
             <br />
@@ -125,7 +123,7 @@ export default function Cartao(props) {
           <div>
             <Card sx={{ maxWidth: 250, backgroundColor: "#00BFFF" }}>
               <CardContent className="card-content">
-              <div>{props.avo}</div>
+                <div>{props.avo}</div>
                 <div id="num-pedido">{props.pedido.numero}</div>
                 <div id="cliente-pedido">{props.pedido.cliente}</div>
                 <div id="data-pedido">
@@ -134,7 +132,9 @@ export default function Cartao(props) {
               </CardContent>
               <CardActions>
                 <Button size="small">Mais Informações</Button>
-                <Button size="small" onClick={() => concluir()}>Concluir Produção</Button>
+                <Button size="small" onClick={() => concluir()}>
+                  Concluir Produção
+                </Button>
               </CardActions>
             </Card>
             <br />
@@ -149,7 +149,7 @@ export default function Cartao(props) {
           <div>
             <Card sx={{ maxWidth: 250, backgroundColor: "#F4A460" }}>
               <CardContent className="card-content">
-              <div>{props.avo}</div>
+                <div>{props.avo}</div>
                 <div id="num-pedido">{props.pedido.numero}</div>
                 <div id="cliente-pedido">{props.pedido.cliente}</div>
                 <div id="data-pedido">
@@ -173,7 +173,7 @@ export default function Cartao(props) {
           <div>
             <Card sx={{ maxWidth: 250, backgroundColor: "#0F0" }}>
               <CardContent className="card-content">
-              <div>{props.avo}</div>
+                <div>{props.avo}</div>
                 <div id="num-pedido">{props.pedido.numero}</div>
                 <div id="cliente-pedido">{props.pedido.cliente}</div>
                 <div id="data-pedido">
@@ -216,22 +216,27 @@ export default function Cartao(props) {
             })}
           </ul>
           <div>
-            {aberto ? <>
+            {aberto ? (
+              <>
                 <hr />
                 <ParaProducao fechar={enviar} pedido={props.pedido.numero} />
-            </>
-            : ''
-            }
+              </>
+            ) : (
+              ""
+            )}
             {fechado ? (
               <>
                 <hr />
                 <p>
                   Início da Produção:{" "}
-                  {convertData(concluidos.data_ini_producao)}
+                  <strong>{convertData(concluidos.data_ini_producao)}</strong>
                 </p>
-                <p>Operador de Produção: {concluidos.operador}</p>
                 <p>
-                  Término da Produção: {convertData(concluidos.data_conclusao)}{" "}
+                  Operador de Produção: <strong>{concluidos.operador}</strong>
+                </p>
+                <p>
+                  Término da Produção:{" "}
+                  <strong>{convertData(concluidos.data_conclusao)}</strong>{" "}
                 </p>
               </>
             ) : (

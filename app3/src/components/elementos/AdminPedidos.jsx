@@ -160,7 +160,7 @@ export default function AdminPedidos(props) {
               fullWidth
               label="Data de entrega"
               variant="standard"
-              defaultValue={pedido.data_entrega}
+              defaultValue={pedido.data_entrega ?? ""}
               type="date"
               name="data_entrega"
               onChange={onChange}
