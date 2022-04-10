@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  
 }
 
 .App-logo {
@@ -26,4 +26,101 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+ul#navegacao {
+  width: 90%;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  background: #159cb0;
+  float: left;
+}
+
+ul#navegacao li {
+  
+  float: left;
+}
+
+ul#navegacao a:-webkit-any-link{
+  display: block;
+  color: #fff;
+  padding: 0 2em;
+  line-height: 2em;
+  text-decoration: none;
+  border-left: 1px solid #61dafb;
+}
+
+ul#navegacao a:-webkit-any-link:hover{
+  color: black;
+  background: #44cade;
+}
+
+
+.vazio{
+  border: 1px solid black;
+  height: 40px;
+}
+
+.datas{
+  align-items: center;
+  width: 90%;
+  border: 1px solid red;
+  float: left;
+}
+
+#titulo{
+  padding: 2px;
+  float: left;
+}
+
+#dataIni{
+  width: 20%;
+  float: left;
+  margin-left: 10px;
+}
+
+#dataFin{
+  width: 20%;
+  float: left;
+  margin-left: 10px;
+}
+
+.botao{
+  float: left;
+  margin-top: 8px;
+  padding-left: 10px;
+}
+
+.clientesPesquisa{
+  margin-top: 5px;
+  width: 90%;
+  border: 1px solid red;
+  float: left;
+  
+}
+
+#escolha{
+  float: left;
+  width: 62.5%;
+}
+
+.numeroPesquisa{
+  margin-top: 5px;
+  width: 90%;
+  border: 1px solid red;
+  float: left;
+}
+
+#numero{
+  float: left;
+  width: 20%;
+}
+
+.resultados{
+  margin-top: 5px;
+  width: 90%;
+  border: 1px solid red;
+  float: left;
 }

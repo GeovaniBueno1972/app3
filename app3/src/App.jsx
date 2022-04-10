@@ -5,7 +5,7 @@ import Pedidos from './components/paginas/Pedidos'
 import Clientes from './components/paginas/Clientes'
 import Home from './components/paginas/Home'
 import ControlePedidos from './components/paginas/ControlePedidos'
-
+import './App.css'
 import Login from "../src/components/auth/Login"
 
 export function App() {
@@ -14,13 +14,32 @@ export function App() {
   return (
     <div className="App">
       <header>
-        <Link to="./login">Login</Link>
-        <Link to="./home">Home</Link>
-        <Link to="./materiais">Materiais</Link>
-        <Link to="./usuarios">Usuários</Link>
-        <Link to="./pedidos">Pedidos</Link>
-        <Link to="./clientes">Clientes</Link>
-        <Link to="./controlePedidos">Controle de Pedidos</Link>
+        <ul id="navegacao">
+          <li className="login">
+            <Link to="./login">Login</Link>
+          </li>
+          <li className="home">
+            <Link to="./home">Home</Link>
+          </li>
+          <li className="materiais">
+             <Link to="./materiais">Materiais</Link>
+          </li>
+          <li className="usuarios">
+              <Link to="./usuarios">Usuários</Link>
+          </li>
+          <li className="pedidos">
+            <Link to="./pedidos">Pedidos</Link>
+          </li>
+          <li className="clientes">
+            <Link to="./clientes">Clientes</Link>
+          </li>
+          <li className="controlePedidos">
+            <Link to="./controlePedidos">Controle de Pedidos</Link>
+          </li>
+        </ul>
+        
+       
+        
       </header>
       <main>
         <Switch>

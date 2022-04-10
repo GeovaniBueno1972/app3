@@ -30,7 +30,7 @@ const ControlePedidos = () => {
   const [padrao, setPadrao] = useState(true);
   const [clientes, setClientes] = useState([]);
   const [cliente, setCliente] = useState({ name: "" });
-  const [numPedido, setNumPedido] = useState()
+  const [numPedido, setNumPedido] = useState({numero:""})
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -54,7 +54,7 @@ const ControlePedidos = () => {
     } else if (name === "cliente_id") {
       setCliente({ name: e.target.value });
     } else if (name === "numero_pedido"){
-      setNumPedido(e.target.value);
+      setNumPedido({numero: e.target.value});
     }
   };
 
@@ -74,27 +74,6 @@ const ControlePedidos = () => {
     datas.data_fin = moment(dataMais).format("YYYY-MM-DD");
   }
 
-  const loadPedidosPorCliente = () => {
-    resetTotais();
-    const url = `${baseApiUrl}/PedidoCliente`;
-    axios.post(url, cliente).then((res) => {
-      const ped = res.data;
-      for (let i = 0; i < ped.length; i++) {
-        ped[i].data_lancamento = convertData(ped[i].data_lancamento);
-        ped[i].data_entrega = convertData(ped[i].data_entrega);
-      }
-      setPedidos(ped);
-      for (let index = 0; index < res.data.length; index++) {
-        const element = res.data[index];
-        var count = 0;
-        if (element.estado === "Aguardando") {
-          count++;
-          setTotais({ ...totais, totalPedAguardando: count });
-        }
-      }
-    });
-  };
-
   const resetTotais = () => {
     setTotais(totalInicial);
   };
@@ -106,8 +85,10 @@ const ControlePedidos = () => {
     setClientes(data.data);
   }
 
-  function loadPedidosPesquisa(tipo) {
+  function loadPedidosPesquisa(tipo="normal") {
     resetTotais();
+    var url = ""
+    var fator = ""
     if (padrao) {
       datasPadrao();
     } else {
@@ -115,8 +96,19 @@ const ControlePedidos = () => {
       datas.data_fin = dataFin;
     }
     console.log(datas);
-    const url = `${baseApiUrl}/pedidos_pesquisa`;
-    axios.post(url, datas).then((res) => {
+    if(tipo === "normal") {
+      url = `${baseApiUrl}/pedidos_pesquisa`;
+      fator = datas
+    }else if(tipo === "cliente"){
+      url = `${baseApiUrl}/PedidoCliente`
+      fator = cliente
+    }else if(tipo === "numero") {
+      url = `${baseApiUrl}/PedidoNumero`
+      fator = numPedido
+      console.log(numPedido);
+    }
+    
+    axios.post(url, fator).then((res) => {
       const ped = res.data;
       for (let i = 0; i < ped.length; i++) {
         ped[i].data_lancamento = convertData(ped[i].data_lancamento);
@@ -135,16 +127,21 @@ const ControlePedidos = () => {
   }
 
   useEffect(() => {
-    loadPedidosPesquisa();
+    loadPedidosPesquisa("normal");
     loadClientes();
   }, []);
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2} margin={3}>
+      
+      <div className="vazio">
+        <p></p>
+      </div>
+      <div className="datas">
+        <div id="titulo">
           <p>Escolha um intervalo para pesquisa:</p>
-          <Grid item xs={2}>
+        </div>
+        <div id="dataIni">
             <TextField
               fullWidth
               label="Data inicial"
@@ -154,19 +151,19 @@ const ControlePedidos = () => {
               onChange={(e) => onChange(e)}
               defaultValue={dataIni}
             ></TextField>
-          </Grid>
-          <Grid item xs={2}>
-            <TextField
-              fullWidth
-              label="Data final"
-              variant="standard"
-              type="date"
-              name="data_final"
-              onChange={(e) => onChange(e)}
-              defaultValue={dataFin}
-            ></TextField>
-          </Grid>
-          <Grid item xs={1.5}>
+        </div> 
+        <div id="dataFin">
+              <TextField
+                  fullWidth
+                  label="Data final"
+                  variant="standard"
+                  type="date"
+                  name="data_final"
+                  onChange={(e) => onChange(e)}
+                  defaultValue={dataFin}
+                ></TextField>
+        </div>
+        <div className="botao">
             <Button
               variant="contained"
               aria-label="outlined primary button"
@@ -174,11 +171,10 @@ const ControlePedidos = () => {
             >
               Pesquisar
             </Button>
-          </Grid>
-        </Grid>
-      </Box>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid item xs={4}>
+        </div> 
+      </div>
+      <div className="clientesPesquisa">
+        <div id="escolha">
           <InputLabel id="demo-mutiple-name-label">Cliente</InputLabel>
           <Select
             fullWidth
@@ -195,35 +191,44 @@ const ControlePedidos = () => {
               </MenuItem>
             ))}
           </Select>
-        </Grid>
-        <Grid item xs={1.5}>
+        </div>
+        <div className="botao">
           <Button
             variant="contained"
             aria-label="outlined primary button"
-            onClick={() => loadPedidosPorCliente()}
+            onClick={() => loadPedidosPesquisa("cliente")}
           >
             Pesquisar
           </Button>
-        </Grid>
-      </Box>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid item xs={4}>
-          <TextField
+        </div>
+      </div>
+
+      <div className="numeroPesquisa">
+        <div id="numero">
+           <TextField
             label="Número do Pedido"
             variant="standard"
             type="number"
             name="numero_pedido"
+            onChange={(e) => onChange(e)}
             defaultValue={numPedido}
           ></TextField>
-        </Grid>
-      </Box>
+        </div>
+        <div className="botao">
+          <Button
+            variant="contained"
+            aria-label="outlined primary button"
+            onClick={() => loadPedidosPesquisa("numero")}
+          >
+            Pesquisar
+          </Button>
+        </div>
+      </div>
 
-      <Box>
+      <div className="resultados">
         <p>Pedidos Aguardando: {totais.totalPedAguardando}</p>
-      </Box>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2} margin={3}></Grid>
-      </Box>
+      </div>
+    
       <TabelaPedidos pedidos={pedidos} />
     </>
   );
