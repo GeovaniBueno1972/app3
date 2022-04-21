@@ -59,14 +59,14 @@ ul#navegacao a:-webkit-any-link:hover{
 
 
 .vazio{
-  border: 1px solid black;
+  
   height: 40px;
 }
 
 .datas{
   align-items: center;
   width: 90%;
-  border: 1px solid red;
+  
   float: left;
 }
 
@@ -96,7 +96,7 @@ ul#navegacao a:-webkit-any-link:hover{
 .clientesPesquisa{
   margin-top: 5px;
   width: 90%;
-  border: 1px solid red;
+  
   float: left;
   
 }
@@ -109,7 +109,7 @@ ul#navegacao a:-webkit-any-link:hover{
 .numeroPesquisa{
   margin-top: 5px;
   width: 90%;
-  border: 1px solid red;
+  
   float: left;
 }
 

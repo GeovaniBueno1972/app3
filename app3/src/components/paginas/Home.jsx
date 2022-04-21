@@ -10,6 +10,7 @@ const Home = () => {
   const [dia, setDia] = useState(["", "", "", "", "", ""]);
   const [pedidos, setPedidos] = useState([]);
   const [novoPedido, setNovoPedido] = useState({});
+ 
 
   const hoje = new Date(now());
   const datas = {};
@@ -17,6 +18,7 @@ const Home = () => {
   const novo = ()=>{
     const novosPedidos = pedidos.filter((item)=> item.numero !== novoPedido.numero)
     setPedidos([...novosPedidos, novoPedido])
+    controle()
   };
 
   
@@ -67,6 +69,9 @@ const Home = () => {
   const load = () => {
     return (
       <>
+      <div className="vazio">
+        <p></p>
+      </div>
         <Box
           className="box-config"
           sx={{

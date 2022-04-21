@@ -33,6 +33,7 @@ export default function Cartao(props) {
   const [open, setOpen] = useState(false);
   const [fechado, setFechado] = useState(false);
   const [aberto, setAberto] = useState(false);
+  
 
   async function loadProdutos() {
     let id = props.pedido.numero;
@@ -227,6 +228,7 @@ export default function Cartao(props) {
             {fechado ? (
               <>
                 <hr />
+                {console.log(concluidos)}
                 <p>
                   Início da Produção:{" "}
                   <strong>{convertData(concluidos.data_ini_producao)}</strong>

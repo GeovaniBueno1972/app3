@@ -84,7 +84,7 @@ const UserLogin = () => {
         </div>
         <button>Login</button>
       </form>
-      <div>{authCtx.token}</div>
+     
     </div>
   );
 };

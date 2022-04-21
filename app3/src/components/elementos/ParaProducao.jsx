@@ -58,6 +58,10 @@ const Paraproducao = (props) => {
     props.fechar()   
   }
 
+  const cancel = () => {
+    setPedido({...pedido, operador:""})
+  }
+
   
 
   const ITEM_HEIGHT = 48;
@@ -112,7 +116,7 @@ const Paraproducao = (props) => {
               aria-label="outlined primary button group"
             >
               <Button onClick={() => save()}>Salvar</Button>
-              <Button onClick={''}>Cancelar</Button>
+              <Button onClick={() => cancel()}>Cancelar</Button>
             </ButtonGroup>
           </Grid>
         </Grid>
