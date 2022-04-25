@@ -42,6 +42,7 @@ const UserLogin = () => {
       const {data} = await axios.post(`${baseApiUrl}/signin`, user)
       localStorage.setItem('usuario_id', data.id)
       localStorage.setItem('usuario_nome', data.name)
+      localStorage.setItem('usuario_funcao', data.funcao)
       authCtx.updateToken(data.token);
     }
   

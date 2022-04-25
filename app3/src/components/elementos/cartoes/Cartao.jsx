@@ -87,9 +87,15 @@ export default function Cartao(props) {
     loadConcluidos();
     if (props.pedido.estado === "Concluido") {
       setFechado(true);
-    } else if (props.pedido.estado === "Aguardando") {
-      setAberto(true);
     }
+    
+    if (localStorage.getItem("usuario_funcao") === '3'){
+
+      if (props.pedido.estado === "Aguardando") {
+          setAberto(true);
+      }
+    }
+    
   }, []);
 
   return (
@@ -132,7 +138,7 @@ export default function Cartao(props) {
                 </div>
               </CardContent>
               <CardActions>
-                <Button size="small">Mais Informações</Button>
+                <Button size="small" onClick={() => handleOpen()}>Mais Informações</Button>
                 <Button size="small" onClick={() => concluir()}>
                   Concluir Produção
                 </Button>
