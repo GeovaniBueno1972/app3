@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { TextField } from "@mui/material";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { Button, Box, TextField } from "@mui/material";
 
 export default function AdminClientes(props) {
   const estadoInicial = {
@@ -61,59 +58,57 @@ export default function AdminClientes(props) {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2} margin={3}>
-          <Grid item xs={2}>
+      <Box display="flex" alignItems="center" gap="20px" margin={3}>
+        <Box display="flex" flexDirection="column" flexGrow={1} gap="10px">
+          <Box display="flex" justifyContent="space-between" gap="20px">
             <TextField
               label="Código"
-              variant="standard"
+              variant="outlined"
               name="id"
               type="number"
               onChange={onChange}
               value={cliente.id}
-            ></TextField>
-          </Grid>
-          <Grid item xs={5}>
+            />
             <TextField
               fullWidth
               label="Nome"
-              variant="standard"
+              variant="outlined"
               name="name"
               onChange={onChange}
               value={cliente.name}
-            ></TextField>
-          </Grid>
-          <Grid item xs={4}>
+            />
+          </Box>
+          <Box display="flex" justifyContent="space-between" gap="20px">
             <TextField
-              fullWidth
               label="Telefone"
-              variant="standard"
+              variant="outlined"
               name="fone"
               onChange={onChange}
               value={cliente.fone}
-            ></TextField>
-          </Grid>
-          <Grid item xs={4}>
+            />
             <TextField
               fullWidth
               label="Bairro"
-              variant="standard"
+              variant="outlined"
               name="bairro"
               onChange={onChange}
               value={cliente.bairro}
-            ></TextField>
-          </Grid>
-          <Grid container justifyContent="flex-end" item xs={7}>
-            <ButtonGroup
-              variant="contained"
-              aria-label="outlined primary button group"
-            >
-              <Button onClick={() => saveCliente()}>Salvar</Button>
-              <Button onClick={() => limpar()}>Cancelar</Button>
-              <Button>Editar</Button>
-            </ButtonGroup>
-          </Grid>
-        </Grid>
+            />
+          </Box>
+        </Box>
+        <Box display="flex" gap="5px">
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => saveCliente()}
+          >
+            Salvar
+          </Button>
+          <Button variant="contained" color="error" onClick={() => limpar()}>
+            Cancelar
+          </Button>
+          <Button variant="contained">Editar</Button>
+        </Box>
       </Box>
       <ToastContainer />
     </>

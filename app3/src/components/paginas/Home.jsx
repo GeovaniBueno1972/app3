@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import Cartao from "../elementos/cartoes/Cartao";
 import axios from "axios";
 import { now } from "moment";
+import { convertData, agora } from "../elementos/funcoes";
 //import Card from '../elementos/Card'
 
 const Home = () => {
@@ -12,7 +13,7 @@ const Home = () => {
   const [novoPedido, setNovoPedido] = useState({});
  
 
-  const hoje = new Date(now());
+  const hoje = new Date();
   const datas = {};
 
   const novo = ()=>{
@@ -43,18 +44,20 @@ const Home = () => {
   }
 
   function ajustarDatas() {
-    let data = new Date();
+    const data = new Date();
+    console.log(convertData(data))
+    console.log(hoje)
+    
+
     for (let index = 0; index < dia.length; index++) {
-      dia[index] = convertData(data.setDate(hoje.getDate() + (index - 2)));
+      let temp = new Date(data);
+      dia[index] = convertData(temp.setDate(hoje.getDate() + (index - 2)));
+      console.log(convertData(data))
+      console.log(dia[index])
     }
   }
 
-  function convertData(dataInput) {
-    let data = new Date(dataInput);
-    let dataFormatada = data.toLocaleDateString("pt-BR", { timeZone: "UTC" });
-    return dataFormatada;
-  }
-
+  
   const controle = () => {
     console.log("entrou no controle");
     ajustarDatas();

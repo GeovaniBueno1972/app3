@@ -1,58 +1,55 @@
-import {Switch, Route, Link} from 'react-router-dom'
-import Materiais from './components/paginas/Materiais'
-import Usuarios from './components/paginas/Usuarios'
-import Pedidos from './components/paginas/Pedidos'
-import Clientes from './components/paginas/Clientes'
-import Home from './components/paginas/Home'
-import ControlePedidos from './components/paginas/ControlePedidos'
-import './App.css'
-import Login from "../src/components/auth/Login"
+import { useEffect } from "react";
+import { Container } from "@mui/material";
+import * as locales from "@mui/material/locale";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+import React from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
+import Login from "../src/components/auth/Login";
+import "./App.css";
+import Header from "./components/elementos/Header/Header";
+import Clientes from "./components/paginas/Clientes";
+import ControlePedidos from "./components/paginas/ControlePedidos";
+import Home from "./components/paginas/Home";
+import Materiais from "./components/paginas/Materiais";
+import Pedidos from "./components/paginas/Pedidos";
+import Usuarios from "./components/paginas/Usuarios";
+import { useAppContext } from "./data/hooks/hook";
 
 export function App() {
-  
-  
+  const theme = useTheme();
+  const history = useHistory();
+
+  const { authCtx } = useAppContext();
+
+  const themeWithLocale = React.useMemo(
+    () => createTheme(theme, locales["ptBR"]),
+    [theme]
+  );
+
+  useEffect(() => {
+    if (authCtx.token === "nenhum token") {
+      history.push("/login");
+    }
+  }, []);
+
   return (
-    <div className="App">
-      <header>
-        <ul id="navegacao">
-          <li className="login">
-            <Link to="./login">Login</Link>
-          </li>
-          <li className="home">
-            <Link to="./home">Home</Link>
-          </li>
-          <li className="materiais">
-             <Link to="./materiais">Materiais</Link>
-          </li>
-          <li className="usuarios">
-              <Link to="./usuarios">Usuários</Link>
-          </li>
-          <li className="pedidos">
-            <Link to="./pedidos">Pedidos</Link>
-          </li>
-          <li className="clientes">
-            <Link to="./clientes">Clientes</Link>
-          </li>
-          <li className="controlePedidos">
-            <Link to="./controlePedidos">Controle de Pedidos</Link>
-          </li>
-        </ul>
-        
-       
-        
-      </header>
-      <main>
-        <Switch>
-          <Route path="/home" component={Home} />
-          <Route path="/login" component={Login} />
-          <Route path="/materiais" component={Materiais}/>
-          <Route path="/usuarios" component={Usuarios}/>
-          <Route path="/pedidos" component={Pedidos}/>
-          <Route path="/clientes" component={Clientes}/>
-          <Route path="/controlePedidos" component={ControlePedidos}/>
-        </Switch>
-      </main>
-      
-    </div>
+    <ThemeProvider theme={themeWithLocale}>
+      <div className="App">
+        {authCtx.token !== "nenhum token" && <Header />}
+        <Container as="main" maxWidth="lg">
+          <Switch>
+            <Route path="/home" component={Home} />
+            {authCtx.token === "nenhum token" && (
+              <Route path="/login" component={Login} />
+            )}
+            <Route path="/materiais" component={Materiais} />
+            <Route path="/usuarios" component={Usuarios} />
+            <Route path="/pedidos" component={Pedidos} />
+            <Route path="/clientes" component={Clientes} />
+            <Route path="/controlePedidos" component={ControlePedidos} />
+          </Switch>
+        </Container>
+      </div>
+    </ThemeProvider>
   );
 }

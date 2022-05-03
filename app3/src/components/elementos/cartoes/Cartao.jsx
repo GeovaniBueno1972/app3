@@ -33,7 +33,6 @@ export default function Cartao(props) {
   const [open, setOpen] = useState(false);
   const [fechado, setFechado] = useState(false);
   const [aberto, setAberto] = useState(false);
-  
 
   async function loadProdutos() {
     let id = props.pedido.numero;
@@ -70,7 +69,6 @@ export default function Cartao(props) {
   const enviar = () => {
     let pedido = props.pedido;
     let pedidoAlterado = {};
-    console.log(pedido);
     if (pedido.estado === "Aguardando") {
       pedidoAlterado = { ...pedido, estado: "Producao" };
     } else if (pedido.estado === "Producao") {
@@ -82,20 +80,17 @@ export default function Cartao(props) {
   };
 
   useEffect(() => {
-    console.log("Loading produtos");
     loadProdutos();
     loadConcluidos();
     if (props.pedido.estado === "Concluido") {
       setFechado(true);
     }
-    
-    if (localStorage.getItem("usuario_funcao") === '3'){
 
+    if (localStorage.getItem("usuario_funcao") === "3") {
       if (props.pedido.estado === "Aguardando") {
-          setAberto(true);
+        setAberto(true);
       }
     }
-    
   }, []);
 
   return (
@@ -138,7 +133,9 @@ export default function Cartao(props) {
                 </div>
               </CardContent>
               <CardActions>
-                <Button size="small" onClick={() => handleOpen()}>Mais Informações</Button>
+                <Button size="small" onClick={() => handleOpen()}>
+                  Mais Informações
+                </Button>
                 <Button size="small" onClick={() => concluir()}>
                   Concluir Produção
                 </Button>

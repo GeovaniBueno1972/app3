@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import { TextField } from "@mui/material";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
+
+import { MenuItem, Button, Box } from "@mui/material";
 
 export default function AdminMateriais(props) {
   const estadoInicial = {
@@ -44,16 +39,14 @@ export default function AdminMateriais(props) {
       .post(`${baseApiUrl}/materiais`, material)
       .then((res) => {
         notify("success");
-        if (props.materiais){
+        if (props.materiais) {
           const novoMaterial = [...props.materiais, material];
           props.setMateriais(novoMaterial);
         }
       })
       .catch((err) => {
-         notify("error");
-        
+        notify("error");
       });
-    
   }
 
   const limpar = () => {
@@ -72,55 +65,52 @@ export default function AdminMateriais(props) {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2} margin={3}>
-          <Grid item xs={2}>
-            <TextField
-              label="Código"
-              variant="standard"
-              name="codigo"
-              type="number"
-              onChange={onChange}
-              value={material.codigo}
-            ></TextField>
-          </Grid>
-          <Grid item xs={5}>
-            <TextField
-              fullWidth
-              label="Nome"
-              variant="standard"
-              name="nome"
-              onChange={onChange}
-              value={material.nome}
-            ></TextField>
-          </Grid>
-          <Grid item xs={2}>
-            <InputLabel id="unidade">Unidade</InputLabel>
-            <Select
-              fullWidth
-              labelId="unidade"
-              variant="standard"
-              name="unidade"
-              value={material.unidade}
-              onChange={onChange}
-            >
-              <MenuItem value={"CH"}>Chapa</MenuItem>
-              <MenuItem value={"ML"}>Metro Linear</MenuItem>
-              <MenuItem value={"UN"}>Unidade</MenuItem>
-            </Select>
-          </Grid>
-
-          <Grid container justifyContent="flex-end" item xs={7}>
-            <ButtonGroup
-              variant="contained"
-              aria-label="outlined primary button group"
-            >
-              <Button onClick={() => save()}>Salvar</Button>
-              <Button onClick={() => limpar()}>Cancelar</Button>
-              <Button>Editar</Button>
-            </ButtonGroup>
-          </Grid>
-        </Grid>
+      <Box
+        display="flex"
+        margin={3}
+        alignItems="center"
+        gap="20px"
+        justifyContent="stretch"
+      >
+        <TextField
+          label="Código"
+          variant="outlined"
+          name="codigo"
+          type="number"
+          onChange={onChange}
+          value={material.codigo}
+        ></TextField>
+        <TextField
+          fullWidth
+          label="Nome"
+          variant="outlined"
+          name="nome"
+          onChange={onChange}
+          value={material.nome}
+        ></TextField>
+        <TextField
+          select
+          label="Unidade"
+          fullWidth
+          labelId="unidade"
+          variant="outlined"
+          name="unidade"
+          value={material.unidade}
+          onChange={onChange}
+        >
+          <MenuItem value={"CH"}>Chapa</MenuItem>
+          <MenuItem value={"ML"}>Metro Linear</MenuItem>
+          <MenuItem value={"UN"}>Unidade</MenuItem>
+        </TextField>
+        <Box display="flex" gap="5px">
+          <Button variant="contained" color="success" onClick={() => save()}>
+            Salvar
+          </Button>
+          <Button variant="contained" color="error" onClick={() => limpar()}>
+            Cancelar
+          </Button>
+          <Button variant="contained">Editar</Button>
+        </Box>
       </Box>
       <ToastContainer />
     </>

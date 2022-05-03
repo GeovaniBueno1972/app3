@@ -1,15 +1,9 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { TextField } from "@mui/material";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
+
+import { Box, TextField, Button, MenuItem } from "@mui/material";
 
 export default function AdminUsuarios(props) {
   const estadoInicial = {
@@ -46,14 +40,14 @@ export default function AdminUsuarios(props) {
       .post(`${baseApiUrl}/users`, usuario)
       .then((res) => {
         status = res.status;
-        if(usuario.id_funcao === 1){
-          usuario.id_funcao = 'Vendedor'
-        }else if(usuario.id_funcao === 2){
-          usuario.id_funcao = 'Operador'
-        }else if(usuario.id_funcao === 3){
-          usuario.id_funcao = 'Administracao'
+        if (usuario.id_funcao === 1) {
+          usuario.id_funcao = "Vendedor";
+        } else if (usuario.id_funcao === 2) {
+          usuario.id_funcao = "Operador";
+        } else if (usuario.id_funcao === 3) {
+          usuario.id_funcao = "Administracao";
         }
-        console.log(usuario)
+        console.log(usuario);
         const novoUsuario = [...props.usuarios, usuario];
         props.setUsuarios(novoUsuario);
       })
@@ -83,24 +77,22 @@ export default function AdminUsuarios(props) {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2} margin={3}>
-          <Grid item xs={5}>
+      <Box display="flex" alignItems="center" margin={3} gap="20px">
+        <Box display="flex" flexDirection="column" flexGrow={1} gap="10px">
+          <Box display="flex" justifyContent="stretch" gap="10px">
             <TextField
               fullWidth
               label="Nome"
-              variant="standard"
+              variant="outlined"
               name="name"
               onChange={onChange}
               value={usuario.name}
-            ></TextField>
-          </Grid>
-          <Grid item xs={4}>
-            <InputLabel id="funcao">Função</InputLabel>
-            <Select
+            />
+            <TextField
+              select
               fullWidth
-              labelId="funcao"
-              variant="standard"
+              label="Função"
+              variant="outlined"
               name="id_funcao"
               value={usuario.id_funcao}
               onChange={onChange}
@@ -108,40 +100,37 @@ export default function AdminUsuarios(props) {
               <MenuItem value={1}>Vendedor</MenuItem>
               <MenuItem value={2}>Operador</MenuItem>
               <MenuItem value={3}>Administração</MenuItem>
-            </Select>
-          </Grid>
-          <br />
-          <Grid item xs={4}>
+            </TextField>
+          </Box>
+
+          <Box display="flex" justifyContent="stretch" gap="10px">
             <TextField
               fullWidth
               label="Senha"
-              variant="standard"
+              variant="outlined"
               name="password"
               onChange={onChange}
               value={usuario.password}
-            ></TextField>
-          </Grid>
-          <Grid item xs={4}>
+            />
             <TextField
               fullWidth
               label="Confirme a Senha"
-              variant="standard"
+              variant="outlined"
               name="confirmPassword"
               onChange={onChange}
               value={usuario.confirmPassword}
-            ></TextField>
-          </Grid>
-          <Grid container justifyContent="flex-end" item xs={7}>
-            <ButtonGroup
-              variant="contained"
-              aria-label="outlined primary button group"
-            >
-              <Button onClick={() => save()}>Salvar</Button>
-              <Button onClick={() => limpar()}>Cancelar</Button>
-              <Button>Editar</Button>
-            </ButtonGroup>
-          </Grid>
-        </Grid>
+            />
+          </Box>
+        </Box>
+        <Box display="flex" gap="5px">
+          <Button variant="contained" color="success" onClick={() => save()}>
+            Salvar
+          </Button>
+          <Button variant="contained" color="error" onClick={() => limpar()}>
+            Cancelar
+          </Button>
+          <Button variant="contained">Editar</Button>
+        </Box>
       </Box>
       <ToastContainer />
     </>

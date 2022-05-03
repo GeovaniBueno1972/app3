@@ -1,27 +1,21 @@
 import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { TextField } from "@mui/material";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Input from "@material-ui/core/Input";
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import {
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  Button,
+  TextField,
+} from "@mui/material";
 
-import AdminClientes from './AdminClientes'
-import MatPedidos from './MatPedidos'
-
-
+import AdminClientes from "./AdminClientes";
+import MatPedidos from "./MatPedidos";
 
 export default function AdminPedidos(props) {
   const estadoInicial = {
@@ -39,7 +33,7 @@ export default function AdminPedidos(props) {
 
   const handleClose = () => {
     setOpen(false);
-    props.recarregar()
+    props.recarregar();
   };
 
   const baseApiUrl = "https://teste-producao1.herokuapp.com";
@@ -69,7 +63,7 @@ export default function AdminPedidos(props) {
         const novoPedido = [...props.pedidos, pedido];
         props.setPedidos(novoPedido);
         notify("success");
-        props.setPedidoAtual(pedido.numero) 
+        props.setPedidoAtual(pedido.numero);
       })
       .catch((err) => {
         notify("error");
@@ -118,74 +112,85 @@ export default function AdminPedidos(props) {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2} margin={3}>
-          <Grid item xs={1}>
-            <TextField
-              fullWidth
-              label="Número Pedido"
-              variant="standard"
-              name="numero"
-              type="number"
-              onChange={onChange}
-              value={pedido.numero ?? ""}
-            ></TextField>
-          </Grid>
-          <Grid item xs={4}>
-            <InputLabel id="demo-mutiple-name-label">Cliente</InputLabel>
-            <Select
-              fullWidth
-              labelId="demo-mutiple-name-label"
-              name="cliente_id"
-              value={pedido.cliente_id ?? ""}
-              onChange={onChange}
-              input={<Input />}
-              MenuProps={MenuProps}
-            >
-              {props.clientes.map((name) => (
-                <MenuItem key={name.id} value={name.id}>
-                  {name.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </Grid>
-          <Grid item xs={1.5}>
-            <Button variant="contained" aria-label="outlined primary button" onClick={handleClickOpen}>
-              Novo Cliente
-            </Button>
-          </Grid>
+      <Box
+        display="flex"
+        margin={3}
+        alignItems="center"
+        gap="20px"
+        justifyContent="stretch"
+      >
+        <TextField
+          label="Número Pedido"
+          variant="outlined"
+          name="numero"
+          type="number"
+          onChange={onChange}
+          value={pedido.numero ?? 0}
+        ></TextField>
+        <Box
+          display="flex"
+          flexGrow={1}
+          width="25%"
+          justifyContent="stretch"
+          alignItems="center"
+          gap="5px"
+        >
+          <TextField
+            SelectProps={{ MenuProps: { ...MenuProps } }}
+            select
+            fullWidth
+            variant="outlined"
+            name="cliente_id"
+            label="Cliente"
+            flexGrow={1}
+            value={pedido.cliente_id ?? ""}
+            onChange={onChange}
+            MenuProps={MenuProps}
+          >
+            {props.clientes.map((name) => (
+              <MenuItem key={name.id} value={name.id}>
+                {name.name}
+              </MenuItem>
+            ))}
+          </TextField>
+          <Button
+            variant="contained"
+            aria-label="outlined primary button"
+            onClick={handleClickOpen}
+          >
+            Novo Cliente
+          </Button>
+        </Box>
 
-          <Grid item xs={2}>
-            <TextField
-              fullWidth
-              label="Data de entrega"
-              variant="standard"
-              defaultValue={pedido.data_entrega ?? ""}
-              type="date"
-              name="data_entrega"
-              onChange={onChange}
-              value={pedido.data_entrega}
-            ></TextField>
-          </Grid>
-          <Grid container justifyContent="flex-end" item xs={2.5}>
-            <ButtonGroup
-              variant="contained"
-              aria-label="outlined primary button group"
-            >
-              <Button onClick={() => save()}>Salvar</Button>
-              <Button onClick={() => limpar()}>Cancelar</Button>
-              <Button>Editar</Button>
-            </ButtonGroup>
-          </Grid>
-        </Grid>
+        <TextField
+          label="Data de entrega"
+          variant="outlined"
+          defaultValue={pedido.data_entrega ?? ""}
+          type="date"
+          name="data_entrega"
+          onChange={onChange}
+          value={pedido.data_entrega}
+        />
+        <Box display="flex" gap="5px" height="100%">
+          <Button variant="contained" color="success" onClick={() => save()}>
+            Salvar
+          </Button>
+          <Button variant="contained" color="error" onClick={() => limpar()}>
+            Cancelar
+          </Button>
+          <Button variant="contained">Editar</Button>
+        </Box>
       </Box>
       <ToastContainer />
 
-
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" 
-      maxWidth={"md"}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+        maxWidth={"md"}
+      >
         <DialogTitle id="form-dialog-title">Cadastro de Clientes</DialogTitle>
-        <DialogContent >
+        <DialogContent>
           <AdminClientes />
         </DialogContent>
         <DialogActions>

@@ -16,7 +16,7 @@
 
   function convertData(dataInput) {
     let data = new Date(dataInput);
-    let dataFormatada = data.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+    let dataFormatada = data.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" });
     return dataFormatada;
   }
 
