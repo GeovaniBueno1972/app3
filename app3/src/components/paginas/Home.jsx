@@ -45,15 +45,9 @@ const Home = () => {
 
   function ajustarDatas() {
     const data = new Date();
-    console.log(convertData(data))
-    console.log(hoje)
-    
-
     for (let index = 0; index < dia.length; index++) {
       let temp = new Date(data);
       dia[index] = convertData(temp.setDate(hoje.getDate() + (index - 2)));
-      console.log(convertData(data))
-      console.log(dia[index])
     }
   }
 

@@ -57,7 +57,8 @@ export default function AdminPedidos(props) {
   }, []);
 
   async function save() {
-    axios
+    console.log(pedido)
+    /*axios
       .post(`${baseApiUrl}/pedidos`, pedido)
       .then((res) => {
         const novoPedido = [...props.pedidos, pedido];
@@ -68,6 +69,7 @@ export default function AdminPedidos(props) {
       .catch((err) => {
         notify("error");
       });
+      */
   }
 
   const limpar = () => {

@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Container } from "@mui/material";
 import * as locales from "@mui/material/locale";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
-import React from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import Login from "../src/components/auth/Login";
 import "./App.css";
@@ -14,6 +13,7 @@ import Materiais from "./components/paginas/Materiais";
 import Pedidos from "./components/paginas/Pedidos";
 import Usuarios from "./components/paginas/Usuarios";
 import { useAppContext } from "./data/hooks/hook";
+import { ToastContainer } from "react-toastify";
 
 export function App() {
   const theme = useTheme();
@@ -21,7 +21,7 @@ export function App() {
 
   const { authCtx } = useAppContext();
 
-  const themeWithLocale = React.useMemo(
+  const themeWithLocale = useMemo(
     () => createTheme(theme, locales["ptBR"]),
     [theme]
   );
@@ -48,6 +48,7 @@ export function App() {
             <Route path="/clientes" component={Clientes} />
             <Route path="/controlePedidos" component={ControlePedidos} />
           </Switch>
+          <ToastContainer />
         </Container>
       </div>
     </ThemeProvider>
