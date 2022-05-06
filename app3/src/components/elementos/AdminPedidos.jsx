@@ -41,7 +41,7 @@ export default function AdminPedidos(props) {
   function onChange(event) {
     const { value, name } = event.target;
     //if ([name] === "id_funcao") value = parseInt(value, 10);
-
+    console.log(event.target.value)
     setPedido({
       ...pedido,
       [name]: value,
@@ -58,7 +58,7 @@ export default function AdminPedidos(props) {
 
   async function save() {
     console.log(pedido)
-    /*axios
+    axios
       .post(`${baseApiUrl}/pedidos`, pedido)
       .then((res) => {
         const novoPedido = [...props.pedidos, pedido];
@@ -68,9 +68,8 @@ export default function AdminPedidos(props) {
       })
       .catch((err) => {
         notify("error");
-      });
-      */
-  }
+      }); 
+    }
 
   const limpar = () => {
     setPedido(estadoInicial);
