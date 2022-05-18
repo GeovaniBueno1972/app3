@@ -17,7 +17,7 @@ export default function AdminClientes(props) {
   const baseApiUrl = "https://teste-producao1.herokuapp.com";
 
   function onChange(event) {
-    const { value, name } = event.target;
+    let { value, name } = event.target;
     if ([name] === "id") value = parseInt(value, 10);
 
     setCliente({

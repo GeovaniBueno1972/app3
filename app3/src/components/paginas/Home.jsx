@@ -11,9 +11,10 @@ const Home = () => {
   const [dia, setDia] = useState(["", "", "", "", "", ""]);
   const [pedidos, setPedidos] = useState([]);
   const [novoPedido, setNovoPedido] = useState({});
-  var resumo1 = {QTD_Chapas:0, QTD_Cortes: 0, QTD_Colagem: 0};
+  var resumo = {QTD_Chapas:0, QTD_Cortes: 0, QTD_Colagem: 0};
   var numero = ""
-  const [total1, setTotal1] = useState({})
+  const [total, setTotal] = useState([resumo, resumo, resumo, resumo, resumo])
+  const somatorio = []
   const hoje = new Date();
   const datas = {};
 
@@ -46,7 +47,7 @@ const Home = () => {
       if (convertData(res.data[index].data_entrega) === dia[0]){
         numero = res.data[index].numero
         console.log(numero);
-        loadProdutos()
+        loadProdutos(index)
       }
     }
     
@@ -55,7 +56,7 @@ const Home = () => {
   }
 
   
-  async function loadProdutos() {
+  async function loadProdutos(posicao) {
     const id = numero
             console.log(id)
             const url = `${baseApiUrl}/materialpedidos/${id}`
@@ -65,14 +66,15 @@ const Home = () => {
                     const element = produtos[index];
                     if (element.unidade === 'CH') {
                       console.log(element.quantidade)
-                        resumo1 = {...resumo1, QTD_Chapas:(resumo1.QTD_Chapas + element.quantidade)}
+                        resumo = {...resumo, QTD_Chapas:(resumo.QTD_Chapas + element.quantidade)}
                     }else if(element.unidade === 'UN'){
-                      resumo1 = {...resumo1, QTD_Cortes: (resumo1.QTD_Cortes + element.quantidade)}
+                      resumo = {...resumo, QTD_Cortes: (resumo.QTD_Cortes + element.quantidade)}
                     }else if(element.unidade === 'ML'){
-                      resumo1 = {...resumo1, QTD_Colagem: (resumo1.QTD_Colagem + element.quantidade)}
+                      resumo = {...resumo, QTD_Colagem: (resumo.QTD_Colagem + element.quantidade)}
                     }
-                    setTotal1(resumo1)
-                    console.log(resumo1)
+                    var soma = resumo
+                    setTotal(total =>{ total[posicao] = soma})
+                    console.log(index)
                 }
             })
   }
@@ -116,10 +118,8 @@ const Home = () => {
           <Paper elevation={3}>
             <div>
               <div>Data {dia[0]} </div>
-              {console.log(total1)}
-              <div>Quantidade de chapas: {total1.QTD_Chapas} </div>
-              <div>Quantidade de cortes: {total1.QTD_Cortes} </div>
-              <div>Quantidade de colagem: {total1.QTD_Colagem} </div>
+              {console.log(total)}
+              <div>Quantidade de chapas: {total.QTD_Chapas}</div>
               
               {pedidos.map((pedido) => {
                 let data = convertData(pedido.data_entrega);
@@ -143,7 +143,9 @@ const Home = () => {
           </Paper>
           <Paper elevation={3}>
             <div>
-              Data {dia[1]}
+              <div>Data {dia[1]}</div>              
+              <div>Quantidade de chapas: {total[1].QTD_Chapas}</div>
+
               {pedidos.map((pedido) => {
                 let data = convertData(pedido.data_entrega);
                 const igual = data === dia[1];
@@ -166,6 +168,7 @@ const Home = () => {
           <Paper elevation={3}>
             <div>
               Data {dia[2]}
+              <div>Quantidade de chapas: {total[1].QTD_Chapas}</div>
               {pedidos.map((pedido) => {
                 let data = convertData(pedido.data_entrega);
                 const igual = data === dia[2];

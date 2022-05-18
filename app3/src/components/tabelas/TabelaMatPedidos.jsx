@@ -1,39 +1,31 @@
-import * as React from "react";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
-import * as locales from "@mui/material/locale";
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Delete } from "@mui/icons-material";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import * as React from "react";
+import {
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from "@mui/material";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function TabelaMatPedidos(props) {
-  const theme = useTheme();
-
   const baseApiUrl = "https://teste-producao1.herokuapp.com";
 
-  const themeWithLocale = React.useMemo(() =>
-    createTheme(theme, locales["ptBR"])
-  );
-
- 
   const columns = [
     { id: "nome", label: "Nome", minWidth: 100 },
     { id: "quantidade", label: "Qtd", minWidth: 15 },
-    { id: "unidade", label: "Und", minWidth: 15},
+    { id: "unidade", label: "Und", minWidth: 15 },
   ];
 
   const [page, setPagina] = React.useState(0);
   const [rowsPerPage, setLinhasPorPagina] = React.useState(10);
-  
 
   const handleChangePagina = (event, newPage) => {
     setPagina(newPage);
@@ -44,7 +36,6 @@ export default function TabelaMatPedidos(props) {
     setPagina(0);
   };
 
-  
   function remove(material) {
     console.log(material);
     const id = material.id;
@@ -52,7 +43,7 @@ export default function TabelaMatPedidos(props) {
       .delete(`${baseApiUrl}/material_pedidos/${id}`)
       .then(() => {
         notify("success");
-        props.recarregar()
+        props.recarregar();
       })
       .catch();
   }
@@ -70,59 +61,54 @@ export default function TabelaMatPedidos(props) {
   return (
     <>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <ThemeProvider theme={themeWithLocale}>
-          <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {[...columns, {id:"acao", label: "", minWidth:100}].map((column) => (
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {[...columns, { id: "acao", label: "", minWidth: 100 }].map(
+                  (column) => (
                     <TableCell
                       key={column.id}
                       style={{ minWidth: column.minWidth }}
                     >
                       {column.label}
                     </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.id}
+                  )
+                )}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return <TableCell key={column.id}>{value}</TableCell>;
+                      })}
+                      <Button
+                        variant="outlined"
+                        onClick={() => remove(row)}
+                        startIcon={<Delete />}
                       >
-                        {columns.map((column) => {
-                          const value = row[column.id];
-                          return <TableCell key={column.id}>{value}</TableCell>;
-                        })}
-                        <Button
-                          variant="outlined"
-                          onClick={() => remove(row)}
-                          startIcon={<DeleteIcon />}
-                        >
-                          Delete
-                        </Button>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 100]}
-            component="div"
-            count={props.listaMatPedido.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePagina}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </ThemeProvider>
+                        Delete
+                      </Button>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={props.listaMatPedido.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePagina}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
       <ToastContainer />
     </>
