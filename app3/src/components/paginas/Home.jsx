@@ -13,7 +13,7 @@ const Home = () => {
   const [novoPedido, setNovoPedido] = useState({});
   var resumo = {QTD_Chapas:0, QTD_Cortes: 0, QTD_Colagem: 0};
   var numero = ""
-  const [total, setTotal] = useState([resumo, resumo, resumo, resumo, resumo])
+  const [total, setTotal] = useState([])
   const somatorio = []
   const hoje = new Date();
   const datas = {};
@@ -47,7 +47,7 @@ const Home = () => {
       if (convertData(res.data[index].data_entrega) === dia[0]){
         numero = res.data[index].numero
         console.log(numero);
-        loadProdutos(index)
+        loadProdutos()
       }
     }
     
@@ -56,7 +56,7 @@ const Home = () => {
   }
 
   
-  async function loadProdutos(posicao) {
+  async function loadProdutos() {
     const id = numero
             console.log(id)
             const url = `${baseApiUrl}/materialpedidos/${id}`
@@ -73,8 +73,11 @@ const Home = () => {
                       resumo = {...resumo, QTD_Colagem: (resumo.QTD_Colagem + element.quantidade)}
                     }
                     var soma = resumo
-                    setTotal(total =>{ total[posicao] = soma})
-                    console.log(index)
+                    console.log(soma)
+                    setTotal(total => [...total, soma])
+                    
+                
+                  
                 }
             })
   }
@@ -119,7 +122,7 @@ const Home = () => {
             <div>
               <div>Data {dia[0]} </div>
               {console.log(total)}
-              <div>Quantidade de chapas: {total.QTD_Chapas}</div>
+              
               
               {pedidos.map((pedido) => {
                 let data = convertData(pedido.data_entrega);
@@ -144,7 +147,7 @@ const Home = () => {
           <Paper elevation={3}>
             <div>
               <div>Data {dia[1]}</div>              
-              <div>Quantidade de chapas: {total[1].QTD_Chapas}</div>
+             
 
               {pedidos.map((pedido) => {
                 let data = convertData(pedido.data_entrega);
@@ -168,7 +171,7 @@ const Home = () => {
           <Paper elevation={3}>
             <div>
               Data {dia[2]}
-              <div>Quantidade de chapas: {total[1].QTD_Chapas}</div>
+              
               {pedidos.map((pedido) => {
                 let data = convertData(pedido.data_entrega);
                 const igual = data === dia[2];
