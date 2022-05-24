@@ -13,7 +13,6 @@ export function AuthProvider(props) {
   function updateToken(newToken) {
     if (newToken !== "") {
       setToken(newToken);
-      window.alert(`new token: ${newToken}`);
       axios.defaults.headers.common['Authorization'] = `bearer ${newToken}`
     } else {
       window.alert("invalid token");

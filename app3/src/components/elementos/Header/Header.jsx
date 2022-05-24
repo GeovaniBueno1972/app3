@@ -1,8 +1,10 @@
 import { AppBar, Button, Container, Toolbar } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios"
+import {useAppContext} from "../../../data/hooks/hook"
 
 export default function Header() {
+  
 
   function fechar() {
     localStorage.removeItem("usuario_nome")
@@ -11,6 +13,7 @@ export default function Header() {
     localStorage.removeItem("usuario_id")
     localStorage.removeItem("length")
     delete axios.defaults.headers.common['Authorization']
+    useAppContext.updateToken('')
   }
 
   const pathname = useLocation().pathname;
