@@ -14,7 +14,7 @@ const Home = () => {
   var resumo = {QTD_Chapas:0, QTD_Cortes: 0, QTD_Colagem: 0};
   var numero = ""
   const [total, setTotal] = useState([])
-  const somatorio = []
+  const chapas = [0, 0, 0, 0, 0]
   const hoje = new Date();
   const datas = {};
 
@@ -44,10 +44,42 @@ const Home = () => {
     const res = await axios.post(url, datas);
     console.log(res.data.length)
     for (let index = 0; index < res.data.length; index++) {
+      
       if (convertData(res.data[index].data_entrega) === dia[0]){
+        var sdia = 0
         numero = res.data[index].numero
         console.log(numero);
-        loadProdutos()
+        loadProdutos(sdia)
+      }
+      if (convertData(res.data[index].data_entrega) === dia[1]){
+        var sdia =1
+        numero = res.data[index].numero
+        console.log(numero);
+        loadProdutos(sdia)
+      }
+      if (convertData(res.data[index].data_entrega) === dia[2]){
+        var sdia = 2
+        numero = res.data[index].numero
+        console.log(numero);
+        loadProdutos(sdia)
+      }
+      if (convertData(res.data[index].data_entrega) === dia[3]){
+        var sdia = 3
+        numero = res.data[index].numero
+        console.log(numero);
+        loadProdutos(sdia)
+      }
+      if (convertData(res.data[index].data_entrega) === dia[4]){
+        var sdia = 4
+        numero = res.data[index].numero
+        console.log(numero);
+        loadProdutos(sdia)
+      }
+      if (convertData(res.data[index].data_entrega) === dia[5]){
+        var sdia = 5
+        numero = res.data[index].numero
+        console.log(numero);
+        loadProdutos(sdia)
       }
     }
     
@@ -56,7 +88,7 @@ const Home = () => {
   }
 
   
-  async function loadProdutos() {
+  async function loadProdutos(dia) {
     const id = numero
             console.log(id)
             const url = `${baseApiUrl}/materialpedidos/${id}`
@@ -66,15 +98,14 @@ const Home = () => {
                     const element = produtos[index];
                     if (element.unidade === 'CH') {
                       console.log(element.quantidade)
-                        resumo = {...resumo, QTD_Chapas:(resumo.QTD_Chapas + element.quantidade)}
+                        chapas[dia] = chapas[dia] + element.quantidade
+                        console.log(chapas[dia])
                     }else if(element.unidade === 'UN'){
                       resumo = {...resumo, QTD_Cortes: (resumo.QTD_Cortes + element.quantidade)}
                     }else if(element.unidade === 'ML'){
                       resumo = {...resumo, QTD_Colagem: (resumo.QTD_Colagem + element.quantidade)}
                     }
-                    var soma = resumo
-                    console.log(soma)
-                    setTotal(total => [...total, soma])
+       
                     
                 
                   
@@ -122,6 +153,7 @@ const Home = () => {
             <div>
               <div>Data {dia[0]} </div>
               {console.log(total)}
+              {console.log(chapas[0])}
               
               
               {pedidos.map((pedido) => {
@@ -147,7 +179,7 @@ const Home = () => {
           <Paper elevation={3}>
             <div>
               <div>Data {dia[1]}</div>              
-             
+             {console.log(total[1])}
 
               {pedidos.map((pedido) => {
                 let data = convertData(pedido.data_entrega);
@@ -171,6 +203,7 @@ const Home = () => {
           <Paper elevation={3}>
             <div>
               Data {dia[2]}
+              {console.log(total[2])}
               
               {pedidos.map((pedido) => {
                 let data = convertData(pedido.data_entrega);
