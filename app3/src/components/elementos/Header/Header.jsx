@@ -1,7 +1,18 @@
 import { AppBar, Button, Container, Toolbar } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
+import axios from "axios"
 
 export default function Header() {
+
+  function fechar() {
+    localStorage.removeItem("usuario_nome")
+    localStorage.removeItem("pedidoAtual")
+    localStorage.removeItem("usuario_funcao")
+    localStorage.removeItem("usuario_id")
+    localStorage.removeItem("length")
+    delete axios.defaults.headers.common['Authorization']
+  }
+
   const pathname = useLocation().pathname;
 
   function getButtonColor(path, pathname) {
@@ -82,6 +93,18 @@ export default function Header() {
               Controle de Pedidos
             </Button>
           </Link>
+          <Link to="/login">
+            <Button
+              onClick={() =>fechar}
+              variant="contained"
+              disableElevation
+              color={getButtonColor("/login", pathname)}
+              sx={{ color: "white" }}
+            >
+              Sair
+            </Button>
+          </Link>
+          
         </Toolbar>
       </Container>
     </AppBar>

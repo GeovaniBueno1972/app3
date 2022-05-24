@@ -1,20 +1,36 @@
-import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import Cartao from "../elementos/cartoes/Cartao";
 import axios from "axios";
-import { now } from "moment";
-import { convertData, agora } from "../elementos/funcoes";
+import React, { useEffect, useState } from "react";
+import Cartao from "../elementos/cartoes/Cartao";
+import { convertData } from "../elementos/funcoes";
 //import Card from '../elementos/Card'
+
+const INIT_RESUMO_VALOR = {
+  date: "",
+  chapas: 0,
+  cortes: 0,
+  colagem: 0,
+};
+
+const INIT_RESUMOS = {
+  1: INIT_RESUMO_VALOR,
+  2: INIT_RESUMO_VALOR,
+  3: INIT_RESUMO_VALOR,
+  4: INIT_RESUMO_VALOR,
+  5: INIT_RESUMO_VALOR,
+  6: INIT_RESUMO_VALOR,
+};
 
 const Home = () => {
   const [dia, setDia] = useState(["", "", "", "", "", ""]);
+  const [resumos, setResumos] = useState(INIT_RESUMOS);
   const [pedidos, setPedidos] = useState([]);
   const [novoPedido, setNovoPedido] = useState({});
-  const [resumo0, setResumo0] = useState({QTD_Chapas:0, QTD_Cortes: 0, QTD_Colagem: 0});
-  var numero = ""
-  const [total, setTotal] = useState([])
-  const chapas = [0, 0, 0, 0, 0]
+  var resumo = { QTD_Chapas: 0, QTD_Cortes: 0, QTD_Colagem: 0 };
+  var numero = "";
+  const [total, setTotal] = useState([]);
+  const somatorio = [];
   const hoje = new Date();
   const datas = {};
 
@@ -23,7 +39,6 @@ const Home = () => {
       (item) => item.numero !== novoPedido.numero
     );
     setPedidos([...novosPedidos, novoPedido]);
-    controle();
   };
 
   const baseApiUrl = "https://teste-producao1.herokuapp.com";
@@ -38,81 +53,87 @@ const Home = () => {
   }
 
   async function loadPesquisa() {
-    console.log("Tentando pegar os pedidos");
+    setTotal([]);
+    setResumos(INIT_RESUMOS);
     datasPadrao();
     const url = `${baseApiUrl}/pedidos_pesquisa`;
     const res = await axios.post(url, datas);
-    console.log(res.data.length)
-    for (let index = 0; index < res.data.length; index++) {
-      
-      if (convertData(res.data[index].data_entrega) === dia[0]){
-        var sdia = 0
-        numero = res.data[index].numero
-        console.log(numero);
-        loadProdutos(sdia)
-      }
-      if (convertData(res.data[index].data_entrega) === dia[1]){
-        sdia = 1
-        numero = res.data[index].numero
-        console.log(numero);
-        loadProdutos(sdia)
-      }
-      if (convertData(res.data[index].data_entrega) === dia[2]){
-        sdia = 2
-        numero = res.data[index].numero
-        console.log(numero);
-        loadProdutos(sdia)
-      }
-      if (convertData(res.data[index].data_entrega) === dia[3]){
-        sdia = 3
-        numero = res.data[index].numero
-        console.log(numero);
-        loadProdutos(sdia)
-      }
-      if (convertData(res.data[index].data_entrega) === dia[4]){
-        sdia = 4
-        numero = res.data[index].numero
-        console.log(numero);
-        loadProdutos(sdia)
-      }
-      if (convertData(res.data[index].data_entrega) === dia[5]){
-        sdia = 5
-        numero = res.data[index].numero
-        console.log(numero);
-        loadProdutos(sdia)
-      }
-    }
 
-    setResumo0({...resumo0, QTD_Chapas: chapas[0]})
-    
+    dia.forEach(async (d, i) => {
+      res.data.forEach(async (data) => {
+        if (convertData(data.data_entrega) === d) {
+          let [chapasPorDia, cortesPorDia, colagemPorDia] = await loadProdutos(
+            data.numero,
+            i
+          );
+          setResumos((res) => {
+            let newRes = { ...res };
+            newRes[i + 1] = {
+              ...newRes[i + 1],
+              chapas: newRes[i + 1].chapas + chapasPorDia,
+              cortes: newRes[i + 1].cortes + cortesPorDia,
+              colagem: newRes[i + 1].colagem + colagemPorDia,
+            };
+
+            return newRes;
+          });
+        }
+      });
+      setResumos((res) => {
+        let newRes = { ...res };
+        newRes[i + 1] = { ...newRes[i + 1], date: d };
+
+        return newRes;
+      });
+    });
+
     setPedidos(res.data);
-    
   }
 
-  
-  async function loadProdutos(sdia) {
-    const id = numero
-            console.log(id)
-            const url = `${baseApiUrl}/materialpedidos/${id}`
-            axios.get(url).then(res => {
-                let produtos = res.data
-                for (let index = 0; index < produtos.length; index++) {
-                    const element = produtos[index];
-                    if (element.unidade === 'CH') {
-                      console.log(element.quantidade)
-                        chapas[sdia] = chapas[sdia] + element.quantidade
-                        console.log(chapas[sdia])
-                    }else if(element.unidade === 'UN'){
-                      //resumo = {...resumo, QTD_Cortes: (resumo.QTD_Cortes + element.quantidade)}
-                    }else if(element.unidade === 'ML'){
-                      //resumo = {...resumo, QTD_Colagem: (resumo.QTD_Colagem + element.quantidade)}
-                    }
-       
-                    
-                
-                  
-                }
-            })
+  async function loadProdutos(id) {
+    const url = `${baseApiUrl}/materialpedidos/${id}`;
+
+    let chapasPorDia = 0;
+    let cortesPorDia = 0;
+    let colagemPorDia = 0;
+
+    let res = await axios.get(url);
+
+    let produtos = res.data;
+
+    produtos.forEach((element, i) => {
+      switch (element.unidade) {
+        case "CH": {
+          chapasPorDia += element.quantidade;
+          resumo = {
+            ...resumo,
+            QTD_Chapas: resumo.QTD_Chapas + element.quantidade,
+          };
+          break;
+        }
+        case "UN": {
+          cortesPorDia += element.quantidade;
+          resumo = {
+            ...resumo,
+            QTD_Cortes: resumo.QTD_Cortes + element.quantidade,
+          };
+          break;
+        }
+        case "ML": {
+          colagemPorDia += element.quantidade;
+          resumo = {
+            ...resumo,
+            QTD_Colagem: resumo.QTD_Colagem + element.quantidade,
+          };
+          break;
+        }
+      }
+      let soma = resumo;
+
+      setTotal((total) => [...total, soma]);
+    });
+
+    return [chapasPorDia, cortesPorDia, colagemPorDia];
   }
 
   function ajustarDatas() {
@@ -124,187 +145,209 @@ const Home = () => {
   }
 
   const controle = () => {
-    console.log("entrou no controle");
     ajustarDatas();
     loadPesquisa();
-    };
+  };
 
   useEffect(() => {
     controle();
-    console.log("useEffect da página Home");
   }, []);
 
-  const load = () => {
-    return (
-      <>
-        <div className="vazio">
-          <p></p>
-        </div>
-        <Box
-          className="box-config"
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            "& > :not(style)": {
-              m: 1,
-              padding: 1,
-            },
-          }}
-        >
-          <Paper elevation={3}>
-            <div>
-              <div>Data {dia[0]} </div>
-              <div> Quantidade de chapas: {resumo0.QTD_Chapas} </div> 
-              {console.log(chapas[0])}
-              
-              
-              {pedidos.map((pedido) => {
-                let data = convertData(pedido.data_entrega);
-                const igual = data === dia[0];
-                return (
-                  <div>
-                    {igual ? (
-                      <Cartao
-                        novo={novo}
-                        setNovoPedido={setNovoPedido}
-                        pedido={pedido}
-                        
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </Paper>
-          <Paper elevation={3}>
-            <div>
-              <div>Data {dia[1]}</div>              
-             {console.log(total[1])}
+  return (
+    <>
+      <div className="vazio">
+        <p></p>
+      </div>
+      <Box
+        className="box-config"
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          "& > :not(style)": {
+            m: 1,
+            padding: 1,
+          },
+        }}
+      >
+        <Paper elevation={3}>
+          <div>
+            <div>Data {dia[0]} </div>
+            <Paper className="resumo" elevation={3}>
+              <div>Num. de chapas: {resumos[1].chapas}</div>
+              <div>Num. de cortes: {resumos[1].cortes}</div>
+              <div>Num. de colagem: {resumos[1].colagem}</div>
+            </Paper>
+            
 
-              {pedidos.map((pedido) => {
-                let data = convertData(pedido.data_entrega);
-                const igual = data === dia[1];
-                return (
-                  <div>
-                    {igual ? (
-                      <Cartao
-                        novo={novo}
-                        setNovoPedido={setNovoPedido}
-                        pedido={pedido}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </Paper>
-          <Paper elevation={3}>
-            <div>
-              Data {dia[2]}
-              {console.log(total[2])}
-              
-              {pedidos.map((pedido) => {
-                let data = convertData(pedido.data_entrega);
-                const igual = data === dia[2];
-                return (
-                  <div>
-                    {igual ? (
-                      <Cartao
-                        novo={novo}
-                        setNovoPedido={setNovoPedido}
-                        pedido={pedido}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </Paper>
-          <Paper elevation={3}>
-            <div>
-              Data {dia[3]}
-              {pedidos.map((pedido) => {
-                let data = convertData(pedido.data_entrega);
-                const igual = data === dia[3];
-                return (
-                  <div>
-                    {igual ? (
-                      <Cartao
-                        novo={novo}
-                        setNovoPedido={setNovoPedido}
-                        pedido={pedido}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </Paper>
-          <Paper elevation={3}>
-            <div>
-              Data {dia[4]}
-              {pedidos.map((pedido) => {
-                let data = convertData(pedido.data_entrega);
-                const igual = data === dia[4];
-                return (
-                  <div>
-                    {igual ? (
-                      <Cartao
-                        novo={novo}
-                        setNovoPedido={setNovoPedido}
-                        pedido={pedido}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </Paper>
-          <Paper elevation={3}>
-            <div>
-              Data {dia[5]}
-              {pedidos.map((pedido) => {
-                let data = convertData(pedido.data_entrega);
-                const igual = data === dia[5];
-                return (
-                  <div>
-                    {igual ? (
-                      <div>
-                        {igual ? (
-                          <Cartao
-                            novo={novo}
-                            setNovoPedido={setNovoPedido}
-                            pedido={pedido}
-                          />
-                        ) : (
-                          ""
-                        )}
-                        <br />
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </Paper>
-        </Box>
-      </>
-    );
-  };
+            {pedidos.map((pedido) => {
+              let data = convertData(pedido.data_entrega);
+              const igual = data === dia[0];
+              return (
+                <div>
+                  {igual ? (
+                    <Cartao
+                      novo={novo}
+                      setNovoPedido={setNovoPedido}
+                      pedido={pedido}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Paper>
+        <Paper elevation={3}>
+          <div>
+            <div>Data {dia[1]}</div>
+            <Paper className="resumo" elevation={3}>
+              <div>Num. de chapas: {resumos[2].chapas}</div>
+              <div>Num. de cortes: {resumos[2].cortes}</div>
+              <div>Num. de colagem: {resumos[2].colagem}</div>
+            </Paper>
 
-  return <div>{load()}</div>;
+            {pedidos.map((pedido) => {
+              let data = convertData(pedido.data_entrega);
+              const igual = data === dia[1];
+              return (
+                <div>
+                  {igual ? (
+                    <Cartao
+                      novo={novo}
+                      setNovoPedido={setNovoPedido}
+                      pedido={pedido}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Paper>
+        <Paper elevation={3}>
+          <div>
+            Data {dia[2]}
+            <Paper className="resumo" elevation={3}>
+              <div>Num. de chapas: {resumos[3].chapas}</div>
+              <div>Num. de cortes: {resumos[3].cortes}</div>
+              <div>Num. de colagem: {resumos[3].colagem}</div>
+            </Paper>
+            {pedidos.map((pedido) => {
+              let data = convertData(pedido.data_entrega);
+              const igual = data === dia[2];
+              return (
+                <div>
+                  {igual ? (
+                    <Cartao
+                      novo={novo}
+                      setNovoPedido={setNovoPedido}
+                      pedido={pedido}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Paper>
+        <Paper elevation={3}>
+          <div>
+            Data {dia[3]}
+            <Paper  className="resumo" elevation={3}>
+              <div>Num. de chapas: {resumos[4].chapas}</div>
+              <div>Num. de cortes: {resumos[4].cortes}</div>
+              <div>Num. de colagem: {resumos[4].colagem}</div>
+            </Paper>
+            {pedidos.map((pedido) => {
+              let data = convertData(pedido.data_entrega);
+              const igual = data === dia[3];
+              return (
+                <div>
+                  {igual ? (
+                    <Cartao
+                      novo={novo}
+                      setNovoPedido={setNovoPedido}
+                      pedido={pedido}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Paper>
+        <Paper elevation={3}>
+          <div>
+            Data {dia[4]}
+            <Paper className="resumo" elevation={3}>
+              <div>Num. de chapas: {resumos[5].chapas}</div>
+              <div>Num. de cortes: {resumos[5].cortes}</div>
+              <div>Num. de colagem: {resumos[5].colagem}</div>
+            </Paper>
+            {pedidos.map((pedido) => {
+              let data = convertData(pedido.data_entrega);
+              const igual = data === dia[4];
+              return (
+                <div>
+                  {igual ? (
+                    <Cartao
+                      novo={novo}
+                      setNovoPedido={setNovoPedido}
+                      pedido={pedido}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Paper>
+        <Paper elevation={3}>
+          <div>
+            Data {dia[5]}
+            <Paper className="resumo" elevation={3}>
+              <div>Num. de chapas: {resumos[6].chapas}</div>
+              <div>Num. de cortes: {resumos[6].cortes}</div>
+              <div>Num. de colagem: {resumos[6].colagem}</div>
+            </Paper>
+            {pedidos.map((pedido) => {
+              let data = convertData(pedido.data_entrega);
+              const igual = data === dia[5];
+              return (
+                <div>
+                  {igual ? (
+                    <div>
+                      {igual ? (
+                        <Cartao
+                          novo={novo}
+                          setNovoPedido={setNovoPedido}
+                          pedido={pedido}
+                        />
+                      ) : (
+                        ""
+                      )}
+                      <br />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Paper>
+      </Box>
+      
+
+      
+      <br />
+    </>
+  );
 };
 
 export default Home;

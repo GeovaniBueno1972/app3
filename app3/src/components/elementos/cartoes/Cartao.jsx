@@ -98,7 +98,7 @@ export default function Cartao(props) {
       <div>
         {props.pedido.estado === "Aguardando" ? (
           <div>
-            <Card sx={{ maxWidth: 250, backgroundColor: "#ccc" }}>
+            <Card className="cartao" sx={{ maxWidth: 250, backgroundColor: "#ccc" }}>
               <CardContent className="card-content">
                 <div>{props.avo}</div>
                 <div id="num-pedido">{props.pedido.numero}</div>

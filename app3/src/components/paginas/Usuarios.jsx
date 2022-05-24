@@ -35,7 +35,7 @@ const Usuarios = () => {
 
   const notify = (tipo) => {
     if (tipo === "success") {
-      toast.success("Cliente excluido com sucesso!");
+      toast.success("Usuário excluido com sucesso!");
     } else {
       toast.error("");
     }
