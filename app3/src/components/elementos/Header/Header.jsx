@@ -2,9 +2,11 @@ import { AppBar, Button, Container, Toolbar } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios"
 import {useAppContext} from "../../../data/hooks/hook"
+import {useHistory} from 'react-router'
 
 export default function Header() {
-  
+  const history = useHistory()
+  const {authCtx} = useAppContext();
 
   function fechar() {
     localStorage.removeItem("usuario_nome")
@@ -13,7 +15,8 @@ export default function Header() {
     localStorage.removeItem("usuario_id")
     localStorage.removeItem("length")
     delete axios.defaults.headers.common['Authorization']
-    useAppContext.updateToken('')
+    authCtx.updateToken("nenhum token")
+    history.push("/login")
   }
 
   const pathname = useLocation().pathname;
@@ -96,9 +99,9 @@ export default function Header() {
               Controle de Pedidos
             </Button>
           </Link>
-          <Link to="/login">
+         
             <Button
-              onClick={() =>fechar}
+              onClick={() =>fechar()}
               variant="contained"
               disableElevation
               color={getButtonColor("/login", pathname)}
@@ -106,7 +109,7 @@ export default function Header() {
             >
               Sair
             </Button>
-          </Link>
+          
           
         </Toolbar>
       </Container>
