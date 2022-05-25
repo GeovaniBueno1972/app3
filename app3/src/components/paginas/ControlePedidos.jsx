@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import { TextField } from "@mui/material";
 import { agora, convertData } from "../elementos/funcoes";
 import moment, { now } from "moment";
@@ -225,9 +223,10 @@ const ControlePedidos = () => {
         </div>
       </div>
 
-      <div className="resultados">
-        <p>Pedidos Aguardando: {totais.totalPedAguardando}</p>
-      </div>
+      {//<div className="resultados">
+        //<p>Pedidos Aguardando: {totais.totalPedAguardando}</p>
+      //</div>
+    }
     
       <TabelaPedidos pedidos={pedidos} />
     </>

@@ -9,11 +9,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 
 export default function TabelaPedidos(props) {
   const theme = useTheme();
@@ -44,26 +40,7 @@ export default function TabelaPedidos(props) {
     setPagina(0);
   };
 
-  function remove(cliente) {
-    console.log(cliente);
-    const baseApiUrl = "https://teste-producao1.herokuapp.com";
-    const id = cliente.id;
-    axios
-      .delete(`${baseApiUrl}/clientes/${id}`)
-      .then(() => {
-        notify("success");
-        props.recarregar()
-      })
-      .catch();
-  }
-
-  const notify = (tipo) => {
-    if (tipo === "success") {
-      toast.success("Cliente excluido com sucesso!");
-    } else {
-      toast.error("");
-    }
-  };
+  
 
   const rows = props.pedidos;
 
@@ -75,14 +52,7 @@ export default function TabelaPedidos(props) {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  {[...columns, {id:"acao", label: "", minWidth:100}].map((column) => (
-                    <TableCell
-                      key={column.id}
-                      style={{ minWidth: column.minWidth }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
+                 
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -100,13 +70,7 @@ export default function TabelaPedidos(props) {
                           const value = row[column.id];
                           return <TableCell key={column.id}>{value}</TableCell>;
                         })}
-                        <Button
-                          variant="outlined"
-                          onClick={() => remove(row)}
-                          startIcon={<DeleteIcon />}
-                        >
-                          Delete
-                        </Button>
+                        
                       </TableRow>
                     );
                   })}
@@ -124,7 +88,7 @@ export default function TabelaPedidos(props) {
           />
         </ThemeProvider>
       </Paper>
-      <ToastContainer />
+      
     </>
   );
 }

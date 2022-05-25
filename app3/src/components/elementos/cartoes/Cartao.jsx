@@ -4,6 +4,7 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import ParaProducao from "../ParaProducao";
@@ -82,7 +83,7 @@ export default function Cartao(props) {
   useEffect(() => {
     loadProdutos();
     loadConcluidos();
-    if (props.pedido.estado === "Concluido") {
+    if (props.pedido.estado === "Concluido" || "Producao") {
       setFechado(true);
     }
 
@@ -98,7 +99,10 @@ export default function Cartao(props) {
       <div>
         {props.pedido.estado === "Aguardando" ? (
           <div>
-            <Card className="cartao" sx={{ maxWidth: 250, backgroundColor: "#ccc" }}>
+            <Card
+              className="cartao"
+              sx={{ maxWidth: 250, backgroundColor: "#ccc" }}
+            >
               <CardContent className="card-content">
                 <div>{props.avo}</div>
                 <div id="num-pedido">{props.pedido.numero}</div>
@@ -108,9 +112,11 @@ export default function Cartao(props) {
                 </div>
               </CardContent>
               <CardActions>
-                <Button size="small" onClick={() => handleOpen()}>
-                  Mais Informações
-                </Button>
+                <Paper elevation={3}>
+                  <Button sx={{ fontSize: "10px" }} size="small" onClick={() => handleOpen()}>
+                    Mais Informações
+                  </Button>
+                </Paper>
               </CardActions>
             </Card>
             <br />
@@ -132,14 +138,39 @@ export default function Cartao(props) {
                   {convertData(props.pedido.data_entrega)}
                 </div>
               </CardContent>
-              <CardActions>
-                <Button size="small" onClick={() => handleOpen()}>
-                  Mais Informações
-                </Button>
-                <Button size="small" onClick={() => concluir()}>
-                  Concluir Produção
-                </Button>
-              </CardActions>
+
+              <Box
+                mb="5px"
+                gap="8px"
+                mx="auto"
+                display="flex"
+                flexDirection="column"
+                width="90%"
+              >
+                <Paper elevation={3}>
+                  <Button
+                    sx={{ fontSize: "10px", width: "100%"}}
+                    size="small"
+                    onClick={() => handleOpen()}
+                  >
+                    Mais Informações
+                  </Button>
+                </Paper>
+
+                {localStorage.getItem("usuario_funcao") === "3" ? (
+                  <Paper elevation={3}>
+                    <Button
+                      sx={{ fontSize: "10px", width: "100%" }}
+                      size="small"
+                      onClick={() => concluir()}
+                    >
+                      Concluir Produção
+                    </Button>
+                  </Paper>
+                ) : (
+                  ""
+                )}
+              </Box>
             </Card>
             <br />
           </div>
@@ -185,9 +216,11 @@ export default function Cartao(props) {
                 </div>
               </CardContent>
               <CardActions>
-                <Button size="small" onClick={() => handleOpen()}>
-                  Mais Informações
-                </Button>
+                <Paper elevation={3}>
+                  <Button sx={{ fontSize: "10px", width: "100%" }} size="small" onClick={() => handleOpen()}>
+                    Mais Informações
+                  </Button>
+                </Paper>
               </CardActions>
             </Card>
             <br />
@@ -223,12 +256,13 @@ export default function Cartao(props) {
             {aberto ? (
               <>
                 <hr />
+                <h3>Iniciar Produção</h3>
                 <ParaProducao fechar={enviar} pedido={props.pedido.numero} />
               </>
             ) : (
               ""
             )}
-            {fechado ? (
+            {fechado && concluidos.data_ini_producao  ? (
               <>
                 <hr />
                 {console.log(concluidos)}
@@ -239,10 +273,14 @@ export default function Cartao(props) {
                 <p>
                   Operador de Produção: <strong>{concluidos.operador}</strong>
                 </p>
-                <p>
-                  Término da Produção:{" "}
-                  <strong>{convertData(concluidos.data_conclusao)}</strong>{" "}
-                </p>
+                {concluidos.data_conclusao ? (
+                  <p>
+                    Término da Produção:{" "}
+                    <strong>{convertData(concluidos.data_conclusao)}</strong>{" "}
+                  </p>
+                ) : (
+                  ""
+                )}
               </>
             ) : (
               ""

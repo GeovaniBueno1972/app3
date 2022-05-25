@@ -59,7 +59,8 @@ export default function Header() {
               Materiais
             </Button>
           </Link>
-          <Link to="/usuarios">
+          {localStorage.getItem("usuario_funcao") === "3" ? (
+            <Link to="/usuarios">
             <Button
               variant="contained"
               disableElevation
@@ -69,6 +70,8 @@ export default function Header() {
               Usuários
             </Button>
           </Link>
+          ) : ("")}
+          
           <Link to="/pedidos">
             <Button
               variant="contained"

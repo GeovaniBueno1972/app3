@@ -134,3 +134,14 @@ ul#navegacao a:-webkit-any-link:hover{
 .cartao{
   padding: 5px
 }
+
+.card-actions{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.card_botao{
+  font-size: 9px;
+}
