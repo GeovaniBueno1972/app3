@@ -98,81 +98,97 @@ export default function Cartao(props) {
     <>
       <div>
         {props.pedido.estado === "Aguardando" ? (
-          <div>
-            <Card
-              className="cartao"
-              sx={{ maxWidth: 250, backgroundColor: "#ccc" }}
+          <Card
+            sx={{
+              padding: "5px",
+              marginBottom: "5px",
+              maxWidth: 250,
+              backgroundColor: "#ccc",
+            }}
+          >
+            <CardContent className="card-content">
+              <div>{props.avo}</div>
+              <div id="num-pedido">{props.pedido.numero}</div>
+              <div id="cliente-pedido">{props.pedido.cliente}</div>
+              <div id="data-pedido">
+                {convertData(props.pedido.data_entrega)}
+              </div>
+            </CardContent>
+            <Box
+              mb="5px"
+              gap="8px"
+              mx="auto"
+              display="flex"
+              flexDirection="column"
+              width="90%"
             >
-              <CardContent className="card-content">
-                <div>{props.avo}</div>
-                <div id="num-pedido">{props.pedido.numero}</div>
-                <div id="cliente-pedido">{props.pedido.cliente}</div>
-                <div id="data-pedido">
-                  {convertData(props.pedido.data_entrega)}
-                </div>
-              </CardContent>
-              <CardActions>
-                <Paper elevation={3}>
-                  <Button sx={{ fontSize: "10px" }} size="small" onClick={() => handleOpen()}>
-                    Mais Informações
-                  </Button>
-                </Paper>
-              </CardActions>
-            </Card>
-            <br />
-          </div>
+              <Paper elevation={3}>
+                <Button
+                  sx={{ fontSize: "10px", width: "100%" }}
+                  size="small"
+                  onClick={() => handleOpen()}
+                >
+                  Mais Informações
+                </Button>
+              </Paper>
+            </Box>
+          </Card>
         ) : (
           ""
         )}
       </div>
       <div>
         {props.pedido.estado === "Producao" ? (
-          <div>
-            <Card className="cartao" sx={{ maxWidth: 250, backgroundColor: "#00BFFF" }}>
-              <CardContent className="card-content">
-                <div>{props.avo}</div>
-                <div id="num-pedido">{props.pedido.numero}</div>
-                <div id="cliente-pedido">{props.pedido.cliente}</div>
-                <div id="data-pedido">
-                  {convertData(props.pedido.data_entrega)}
-                </div>
-              </CardContent>
+          <Card
+            sx={{
+              padding: "5px",
+              marginBottom: "5px",
+              maxWidth: 250,
+              backgroundColor: "#00BFFF",
+            }}
+          >
+            <CardContent className="card-content">
+              <div>{props.avo}</div>
+              <div id="num-pedido">{props.pedido.numero}</div>
+              <div id="cliente-pedido">{props.pedido.cliente}</div>
+              <div id="data-pedido">
+                {convertData(props.pedido.data_entrega)}
+              </div>
+            </CardContent>
 
-              <Box
-                mb="5px"
-                gap="8px"
-                mx="auto"
-                display="flex"
-                flexDirection="column"
-                width="90%"
-              >
+            <Box
+              mb="5px"
+              gap="8px"
+              mx="auto"
+              display="flex"
+              flexDirection="column"
+              width="90%"
+            >
+              <Paper elevation={3}>
+                <Button
+                  sx={{ fontSize: "10px", width: "100%" }}
+                  size="small"
+                  onClick={() => handleOpen()}
+                >
+                  Mais Informações
+                </Button>
+              </Paper>
+
+              {localStorage.getItem("usuario_funcao") === "3" ? (
                 <Paper elevation={3}>
                   <Button
-                    sx={{ fontSize: "10px", width: "100%"}}
+                    sx={{ fontSize: "10px", width: "100%" }}
                     size="small"
-                    onClick={() => handleOpen()}
+                    onClick={() => concluir()}
                   >
-                    Mais Informações
+                    Concluir Produção
                   </Button>
                 </Paper>
-
-                {localStorage.getItem("usuario_funcao") === "3" ? (
-                  <Paper elevation={3}>
-                    <Button
-                      sx={{ fontSize: "10px", width: "100%" }}
-                      size="small"
-                      onClick={() => concluir()}
-                    >
-                      Concluir Produção
-                    </Button>
-                  </Paper>
-                ) : (
-                  ""
-                )}
-              </Box>
-            </Card>
-            <br />
-          </div>
+              ) : (
+                ""
+              )}
+            </Box>
+          </Card>
         ) : (
           ""
         )}
@@ -180,49 +196,61 @@ export default function Cartao(props) {
 
       <div>
         {props.pedido.estado === "Pendencia" ? (
-          <div className="cartao">
-            <Card  sx={{ maxWidth: 250, backgroundColor: "#F4A460" }}>
-              <CardContent className="card-content">
-                <div>{props.avo}</div>
-                <div id="num-pedido">{props.pedido.numero}</div>
-                <div id="cliente-pedido">{props.pedido.cliente}</div>
-                <div id="data-pedido">
-                  {convertData(props.pedido.data_entrega)}
-                </div>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Mais Informações</Button>
-                <Button size="small">Para Produção</Button>
-              </CardActions>
-            </Card>
-            <br />
-          </div>
+          <Card sx={{ maxWidth: 250, backgroundColor: "#F4A460" }}>
+            <CardContent className="card-content">
+              <div>{props.avo}</div>
+              <div id="num-pedido">{props.pedido.numero}</div>
+              <div id="cliente-pedido">{props.pedido.cliente}</div>
+              <div id="data-pedido">
+                {convertData(props.pedido.data_entrega)}
+              </div>
+            </CardContent>
+            <CardActions>
+              <Button size="small">Mais Informações</Button>
+              <Button size="small">Para Produção</Button>
+            </CardActions>
+          </Card>
         ) : (
           ""
         )}
       </div>
       <div>
         {props.pedido.estado === "Concluido" ? (
-          <div>
-            <Card className="cartao" sx={{ maxWidth: 250, backgroundColor: "#0F0" }}>
-              <CardContent className="card-content">
-                <div>{props.avo}</div>
-                <div id="num-pedido">{props.pedido.numero}</div>
-                <div id="cliente-pedido">{props.pedido.cliente}</div>
-                <div id="data-pedido">
-                  {convertData(props.pedido.data_entrega)}
-                </div>
-              </CardContent>
-              <CardActions>
-                <Paper elevation={3}>
-                  <Button sx={{ fontSize: "10px", width: "100%" }} size="small" onClick={() => handleOpen()}>
-                    Mais Informações
-                  </Button>
-                </Paper>
-              </CardActions>
-            </Card>
-            <br />
-          </div>
+          <Card
+            sx={{
+              marginBottom: "5px",
+              maxWidth: 250,
+              backgroundColor: "#0F0",
+              padding: "5px",
+            }}
+          >
+            <CardContent className="card-content">
+              <div>{props.avo}</div>
+              <div id="num-pedido">{props.pedido.numero}</div>
+              <div id="cliente-pedido">{props.pedido.cliente}</div>
+              <div id="data-pedido">
+                {convertData(props.pedido.data_entrega)}
+              </div>
+            </CardContent>
+            <Box
+              mb="5px"
+              gap="8px"
+              mx="auto"
+              display="flex"
+              flexDirection="column"
+              width="90%"
+            >
+              <Paper elevation={3}>
+                <Button
+                  sx={{ fontSize: "10px", width: "100%" }}
+                  size="small"
+                  onClick={() => handleOpen()}
+                >
+                  Mais Informações
+                </Button>
+              </Paper>
+            </Box>
+          </Card>
         ) : (
           ""
         )}
@@ -260,7 +288,7 @@ export default function Cartao(props) {
             ) : (
               ""
             )}
-            {fechado && concluidos.data_ini_producao  ? (
+            {fechado && concluidos.data_ini_producao ? (
               <>
                 <hr />
                 <p>

@@ -132,8 +132,8 @@ ul#navegacao a:-webkit-any-link:hover{
 }
 
 .cartao{
-  margin-bottom: 5px;
-  padding: 5px
+  margin-top: 5px;
+  
 }
 
 .card-actions{
@@ -145,4 +145,8 @@ ul#navegacao a:-webkit-any-link:hover{
 
 .card_botao{
   font-size: 9px;
+}
+
+.card-content{
+  padding: 5px;
 }

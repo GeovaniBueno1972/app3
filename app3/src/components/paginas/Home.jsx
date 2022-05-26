@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cartao from "../elementos/cartoes/Cartao";
 import { convertData } from "../elementos/funcoes";
-//import Card from '../elementos/Card'
+
 
 const INIT_RESUMO_VALOR = {
   date: "",
@@ -30,7 +30,7 @@ const Home = () => {
   var resumo = { QTD_Chapas: 0, QTD_Cortes: 0, QTD_Colagem: 0 };
   var numero = "";
   const [total, setTotal] = useState([]);
-  const somatorio = [];
+ 
   const hoje = new Date();
   const datas = {};
 
@@ -159,7 +159,7 @@ const Home = () => {
         <p></p>
       </div>
       <Box
-        className="box-config"
+        
         sx={{
           display: "flex",
           flexWrap: "wrap",
@@ -178,15 +178,15 @@ const Home = () => {
               <div>Num. de cortes: {resumos[1].cortes}</div>
               <div>Num. de colagem: {resumos[1].colagem}</div>
             </Paper>
-            
 
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
               const igual = data === dia[0];
               return (
-                <div>
+                <div >
                   {igual ? (
                     <Cartao
+                      
                       novo={novo}
                       setNovoPedido={setNovoPedido}
                       pedido={pedido}
