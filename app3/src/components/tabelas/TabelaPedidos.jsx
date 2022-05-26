@@ -20,7 +20,7 @@ export default function TabelaPedidos(props) {
 
   const columns = [
     { id: "numero", label: "Número", minWidth: 10 },
-    { id: "data_lancamento", label: "Data de lançamento", minWidth: 30 },
+    
     { id: "data_entrega", label: "Data de entrega", minWidth: 30 },
     { id: "usuario", label: "Vendedor", minWidth: 50 },
     { id: "cliente", label: "Cliente", minWidth: 50 },
@@ -52,7 +52,16 @@ export default function TabelaPedidos(props) {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                 
+                {[...columns, { id: "acao", label: "", minWidth: 100 }].map(
+                  (column) => (
+                    <TableCell
+                      key={column.id}
+                      style={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  )
+                )}
                 </TableRow>
               </TableHead>
               <TableBody>
