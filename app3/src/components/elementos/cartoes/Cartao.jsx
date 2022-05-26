@@ -181,7 +181,7 @@ export default function Cartao(props) {
                     size="small"
                     onClick={() => concluir()}
                   >
-                    Concluir Produção
+                    Concluir
                   </Button>
                 </Paper>
               ) : (
