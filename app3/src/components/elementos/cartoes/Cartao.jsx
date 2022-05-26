@@ -125,11 +125,10 @@ export default function Cartao(props) {
           ""
         )}
       </div>
-
       <div>
         {props.pedido.estado === "Producao" ? (
           <div>
-            <Card sx={{ maxWidth: 250, backgroundColor: "#00BFFF" }}>
+            <Card className="cartao" sx={{ maxWidth: 250, backgroundColor: "#00BFFF" }}>
               <CardContent className="card-content">
                 <div>{props.avo}</div>
                 <div id="num-pedido">{props.pedido.numero}</div>
@@ -181,8 +180,8 @@ export default function Cartao(props) {
 
       <div>
         {props.pedido.estado === "Pendencia" ? (
-          <div>
-            <Card sx={{ maxWidth: 250, backgroundColor: "#F4A460" }}>
+          <div className="cartao">
+            <Card  sx={{ maxWidth: 250, backgroundColor: "#F4A460" }}>
               <CardContent className="card-content">
                 <div>{props.avo}</div>
                 <div id="num-pedido">{props.pedido.numero}</div>
@@ -202,11 +201,10 @@ export default function Cartao(props) {
           ""
         )}
       </div>
-
       <div>
         {props.pedido.estado === "Concluido" ? (
           <div>
-            <Card sx={{ maxWidth: 250, backgroundColor: "#0F0" }}>
+            <Card className="cartao" sx={{ maxWidth: 250, backgroundColor: "#0F0" }}>
               <CardContent className="card-content">
                 <div>{props.avo}</div>
                 <div id="num-pedido">{props.pedido.numero}</div>
@@ -265,7 +263,6 @@ export default function Cartao(props) {
             {fechado && concluidos.data_ini_producao  ? (
               <>
                 <hr />
-                {console.log(concluidos)}
                 <p>
                   Início da Produção:{" "}
                   <strong>{convertData(concluidos.data_ini_producao)}</strong>

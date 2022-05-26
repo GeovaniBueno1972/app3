@@ -172,6 +172,7 @@ const Home = () => {
         <Paper elevation={3}>
           <div>
             <div>Data {dia[0]} </div>
+            <div></div>
             <Paper className="resumo" elevation={3}>
               <div>Num. de chapas: {resumos[1].chapas}</div>
               <div>Num. de cortes: {resumos[1].cortes}</div>

@@ -126,12 +126,13 @@ ul#navegacao a:-webkit-any-link:hover{
 }
 
 .resumo{
-  margin: 2px 0px;
+  margin: 5px 0px;
   padding: 5px;
   font-size: 12px;
 }
 
 .cartao{
+  margin-bottom: 5px;
   padding: 5px
 }
 
