@@ -222,13 +222,14 @@ const ControlePedidos = () => {
           </Button>
         </div>
       </div>
+      <br/>
 
       {//<div className="resultados">
         //<p>Pedidos Aguardando: {totais.totalPedAguardando}</p>
       //</div>
     }
     
-      <TabelaPedidos pedidos={pedidos} />
+      <TabelaPedidos sx={{marginTop: 3}} pedidos={pedidos} />
     </>
   );
 };
