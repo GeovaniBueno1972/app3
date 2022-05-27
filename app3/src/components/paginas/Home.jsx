@@ -20,10 +20,14 @@ const INIT_RESUMOS = {
   4: INIT_RESUMO_VALOR,
   5: INIT_RESUMO_VALOR,
   6: INIT_RESUMO_VALOR,
+  7: INIT_RESUMO_VALOR,
+  8: INIT_RESUMO_VALOR,
+  9: INIT_RESUMO_VALOR,
+  10: INIT_RESUMO_VALOR,
 };
 
 const Home = () => {
-  const [dia, setDia] = useState(["", "", "", "", "", ""]);
+  const [dia, setDia] = useState(["", "", "", "", "", "", "", "", "", ""]);
   const [resumos, setResumos] = useState(INIT_RESUMOS);
   const [pedidos, setPedidos] = useState([]);
   const [novoPedido, setNovoPedido] = useState({});
@@ -137,10 +141,14 @@ const Home = () => {
   }
 
   function ajustarDatas() {
-    const data = new Date();
-    for (let index = 0; index < dia.length; index++) {
-      let temp = new Date(data);
-      dia[index] = convertData(temp.setDate(hoje.getDate() + (index - 2)));
+    const temp = new Date();
+    dia[0] = temp.setDate(hoje.getDate() - 2);
+    for (let index = 1; index < dia.length; index++) {
+      let diaAtual = new Date(dia[index - 1]); 
+        if (diaAtual.getDay() === 5){
+          diaAtual.setDate(diaAtual.getDate() + 1);
+        }
+      dia[index] = temp.setDate(diaAtual.getDate() + 1);
     }
   }
 
@@ -158,20 +166,22 @@ const Home = () => {
       <div className="vazio">
         <p></p>
       </div>
-      <Box
+      <div className="teste" scrolling="auto">
+        <Box
         
         sx={{
           display: "flex",
           flexWrap: "wrap",
           "& > :not(style)": {
-            m: 1,
+           margin:"5px",
             padding: 1,
+            border: "1px solid black"
           },
         }}
       >
         <Paper elevation={3}>
           <div>
-            <div>Data {dia[0]} </div>
+            <div>Data {convertData(dia[0])} </div>
             <div></div>
             <Paper className="resumo" elevation={3}>
               <div>Num. de chapas: {resumos[1].chapas}</div>
@@ -181,7 +191,7 @@ const Home = () => {
 
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
-              const igual = data === dia[0];
+              const igual = data === convertData(dia[0]);
               return (
                 <div >
                   {igual ? (
@@ -201,7 +211,7 @@ const Home = () => {
         </Paper>
         <Paper elevation={3}>
           <div>
-            <div>Data {dia[1]}</div>
+            <div>Data {convertData(dia[1])}</div>
             <Paper className="resumo" elevation={3}>
               <div>Num. de chapas: {resumos[2].chapas}</div>
               <div>Num. de cortes: {resumos[2].cortes}</div>
@@ -210,7 +220,7 @@ const Home = () => {
 
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
-              const igual = data === dia[1];
+              const igual = data === convertData(dia[1]);
               return (
                 <div>
                   {igual ? (
@@ -229,7 +239,7 @@ const Home = () => {
         </Paper>
         <Paper elevation={3}>
           <div>
-            Data {dia[2]}
+            Data {convertData(dia[2])}
             <Paper className="resumo" elevation={3}>
               <div>Num. de chapas: {resumos[3].chapas}</div>
               <div>Num. de cortes: {resumos[3].cortes}</div>
@@ -237,7 +247,7 @@ const Home = () => {
             </Paper>
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
-              const igual = data === dia[2];
+              const igual = data === convertData(dia[2]);
               return (
                 <div>
                   {igual ? (
@@ -256,7 +266,7 @@ const Home = () => {
         </Paper>
         <Paper elevation={3}>
           <div>
-            Data {dia[3]}
+            Data {convertData(dia[3])}
             <Paper  className="resumo" elevation={3}>
               <div>Num. de chapas: {resumos[4].chapas}</div>
               <div>Num. de cortes: {resumos[4].cortes}</div>
@@ -264,7 +274,7 @@ const Home = () => {
             </Paper>
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
-              const igual = data === dia[3];
+              const igual = data === convertData(dia[3]);
               return (
                 <div>
                   {igual ? (
@@ -283,7 +293,7 @@ const Home = () => {
         </Paper>
         <Paper elevation={3}>
           <div>
-            Data {dia[4]}
+            Data {convertData(dia[4])}
             <Paper className="resumo" elevation={3}>
               <div>Num. de chapas: {resumos[5].chapas}</div>
               <div>Num. de cortes: {resumos[5].cortes}</div>
@@ -291,7 +301,7 @@ const Home = () => {
             </Paper>
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
-              const igual = data === dia[4];
+              const igual = data === convertData(dia[4]);
               return (
                 <div>
                   {igual ? (
@@ -310,7 +320,7 @@ const Home = () => {
         </Paper>
         <Paper elevation={3}>
           <div>
-            Data {dia[5]}
+            Data {convertData(dia[5])}
             <Paper className="resumo" elevation={3}>
               <div>Num. de chapas: {resumos[6].chapas}</div>
               <div>Num. de cortes: {resumos[6].cortes}</div>
@@ -318,7 +328,75 @@ const Home = () => {
             </Paper>
             {pedidos.map((pedido) => {
               let data = convertData(pedido.data_entrega);
-              const igual = data === dia[5];
+              const igual = data === convertData(dia[5]);
+              return (
+                <div>
+                  {igual ? (
+                    <div>
+                      {igual ? (
+                        <Cartao
+                          novo={novo}
+                          setNovoPedido={setNovoPedido}
+                          pedido={pedido}
+                        />
+                      ) : (
+                        ""
+                      )}
+                      <br />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Paper>
+        <Paper elevation={3}>
+          <div>
+            Data {convertData(dia[6])}
+            <Paper className="resumo" elevation={3}>
+              <div>Num. de chapas: {resumos[7].chapas}</div>
+              <div>Num. de cortes: {resumos[7].cortes}</div>
+              <div>Num. de colagem: {resumos[7].colagem}</div>
+            </Paper>
+            {pedidos.map((pedido) => {
+              let data = convertData(pedido.data_entrega);
+              const igual = data === convertData(dia[6]);
+              return (
+                <div>
+                  {igual ? (
+                    <div>
+                      {igual ? (
+                        <Cartao
+                          novo={novo}
+                          setNovoPedido={setNovoPedido}
+                          pedido={pedido}
+                        />
+                      ) : (
+                        ""
+                      )}
+                      <br />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Paper>
+        <Paper elevation={3}>
+          <div>
+            Data {convertData(dia[7])}
+            <Paper className="resumo" elevation={3}>
+              <div>Num. de chapas: {resumos[8].chapas}</div>
+              <div>Num. de cortes: {resumos[8].cortes}</div>
+              <div>Num. de colagem: {resumos[8].colagem}</div>
+            </Paper>
+            {pedidos.map((pedido) => {
+              let data = convertData(pedido.data_entrega);
+              const igual = data === convertData(dia[7]);
               return (
                 <div>
                   {igual ? (
@@ -343,10 +421,11 @@ const Home = () => {
           </div>
         </Paper>
       </Box>
+      </div>
+      
       
 
       
-      <br />
     </>
   );
 };

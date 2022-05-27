@@ -56,7 +56,14 @@ ul#navegacao a:-webkit-any-link:hover{
   color: black;
   background: #44cade;
 }
+ .MuiContainer-root{
+   padding: 2px;
+ }
 
+.teste{
+  width: 100%;
+  
+}
 
 .vazio{
   
@@ -65,7 +72,7 @@ ul#navegacao a:-webkit-any-link:hover{
 
 .datas{
   align-items: center;
-  width: 90%;
+  width: 100%;
   
   float: left;
 }
@@ -149,4 +156,10 @@ ul#navegacao a:-webkit-any-link:hover{
 
 .card-content{
   padding: 5px;
+  
+  font-size: 12px;
+}
+
+#cliente-pedido{
+  font-size: 10px;
 }

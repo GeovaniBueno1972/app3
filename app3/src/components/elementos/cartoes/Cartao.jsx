@@ -4,7 +4,6 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import ParaProducao from "../ParaProducao";
@@ -102,9 +101,10 @@ export default function Cartao(props) {
             sx={{
               padding: "5px",
               marginBottom: "5px",
-              maxWidth: 250,
+              maxWidth: 200,
               backgroundColor: "#ccc",
             }}
+            onClick={() => handleOpen()}
           >
             <CardContent className="card-content">
               <div>{props.avo}</div>
@@ -114,24 +114,7 @@ export default function Cartao(props) {
                 {convertData(props.pedido.data_entrega)}
               </div>
             </CardContent>
-            <Box
-              mb="5px"
-              gap="8px"
-              mx="auto"
-              display="flex"
-              flexDirection="column"
-              width="90%"
-            >
-              <Paper elevation={3}>
-                <Button
-                  sx={{ fontSize: "10px", width: "100%" }}
-                  size="small"
-                  onClick={() => handleOpen()}
-                >
-                  Mais Informações
-                </Button>
-              </Paper>
-            </Box>
+            
           </Card>
         ) : (
           ""
@@ -143,9 +126,10 @@ export default function Cartao(props) {
             sx={{
               padding: "5px",
               marginBottom: "5px",
-              maxWidth: 250,
+              maxWidth: 200,
               backgroundColor: "#00BFFF",
             }}
+            onClick={() => handleOpen()}
           >
             <CardContent className="card-content">
               <div>{props.avo}</div>
@@ -155,39 +139,6 @@ export default function Cartao(props) {
                 {convertData(props.pedido.data_entrega)}
               </div>
             </CardContent>
-
-            <Box
-              mb="5px"
-              gap="8px"
-              mx="auto"
-              display="flex"
-              flexDirection="column"
-              width="90%"
-            >
-              <Paper elevation={3}>
-                <Button
-                  sx={{ fontSize: "10px", width: "100%" }}
-                  size="small"
-                  onClick={() => handleOpen()}
-                >
-                  Mais Informações
-                </Button>
-              </Paper>
-
-              {localStorage.getItem("usuario_funcao") === "3" ? (
-                <Paper elevation={3}>
-                  <Button
-                    sx={{ fontSize: "10px", width: "100%" }}
-                    size="small"
-                    onClick={() => concluir()}
-                  >
-                    Concluir
-                  </Button>
-                </Paper>
-              ) : (
-                ""
-              )}
-            </Box>
           </Card>
         ) : (
           ""
@@ -219,10 +170,11 @@ export default function Cartao(props) {
           <Card
             sx={{
               marginBottom: "5px",
-              maxWidth: 250,
+              maxWidth: 200,
               backgroundColor: "#0F0",
               padding: "5px",
             }}
+            onClick={() => handleOpen()}
           >
             <CardContent className="card-content">
               <div>{props.avo}</div>
@@ -232,24 +184,7 @@ export default function Cartao(props) {
                 {convertData(props.pedido.data_entrega)}
               </div>
             </CardContent>
-            <Box
-              mb="5px"
-              gap="8px"
-              mx="auto"
-              display="flex"
-              flexDirection="column"
-              width="90%"
-            >
-              <Paper elevation={3}>
-                <Button
-                  sx={{ fontSize: "10px", width: "100%" }}
-                  size="small"
-                  onClick={() => handleOpen()}
-                >
-                  Mais Informações
-                </Button>
-              </Paper>
-            </Box>
+            
           </Card>
         ) : (
           ""

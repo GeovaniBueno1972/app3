@@ -36,7 +36,7 @@ export function App() {
     <ThemeProvider theme={themeWithLocale}>
       <div className="App">
         {authCtx.token !== "nenhum token" && <Header />}
-        <Container as="main" maxWidth="lg">
+        <Container as="main" maxWidth="90%">
           <Switch>
             <Route path="/home" component={Home} />
             {authCtx.token === "nenhum token" && (
