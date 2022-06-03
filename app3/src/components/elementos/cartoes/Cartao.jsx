@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import ParaProducao from "../ParaProducao";
-import { convertData } from "../funcoes";
+import { convertData, convertDataBanco } from "../funcoes";
 
 import "./cartao.css";
 
@@ -33,6 +33,7 @@ export default function Cartao(props) {
   const [open, setOpen] = useState(false);
   const [fechado, setFechado] = useState(false);
   const [aberto, setAberto] = useState(false);
+  const [administrador, setAdministrador] = useState(false);
 
   async function loadProdutos() {
     let id = props.pedido.numero;
@@ -64,6 +65,7 @@ export default function Cartao(props) {
   const handleClose = () => {
     setOpen(false);
     props.novo();
+    props.controle()
   };
 
   const enviar = () => {
@@ -87,6 +89,8 @@ export default function Cartao(props) {
     }
 
     if (localStorage.getItem("usuario_funcao") === "3") {
+      setAdministrador(true);
+      console.log("Administrador " + (administrador))
       if (props.pedido.estado === "Aguardando") {
         setAberto(true);
       }
@@ -101,7 +105,7 @@ export default function Cartao(props) {
             sx={{
               padding: "5px",
               marginBottom: "5px",
-              maxWidth: 200,
+              maxWidth: 130,
               backgroundColor: "#ccc",
             }}
             onClick={() => handleOpen()}
@@ -114,7 +118,6 @@ export default function Cartao(props) {
                 {convertData(props.pedido.data_entrega)}
               </div>
             </CardContent>
-            
           </Card>
         ) : (
           ""
@@ -126,7 +129,7 @@ export default function Cartao(props) {
             sx={{
               padding: "5px",
               marginBottom: "5px",
-              maxWidth: 200,
+              maxWidth: 130,
               backgroundColor: "#00BFFF",
             }}
             onClick={() => handleOpen()}
@@ -147,7 +150,7 @@ export default function Cartao(props) {
 
       <div>
         {props.pedido.estado === "Pendencia" ? (
-          <Card sx={{ maxWidth: 250, backgroundColor: "#F4A460" }}>
+          <Card sx={{ maxWidth: 130, backgroundColor: "#F4A460" }}>
             <CardContent className="card-content">
               <div>{props.avo}</div>
               <div id="num-pedido">{props.pedido.numero}</div>
@@ -170,7 +173,7 @@ export default function Cartao(props) {
           <Card
             sx={{
               marginBottom: "5px",
-              maxWidth: 200,
+              maxWidth: 130,
               backgroundColor: "#0F0",
               padding: "5px",
             }}
@@ -184,7 +187,6 @@ export default function Cartao(props) {
                 {convertData(props.pedido.data_entrega)}
               </div>
             </CardContent>
-            
           </Card>
         ) : (
           ""
@@ -228,7 +230,7 @@ export default function Cartao(props) {
                 <hr />
                 <p>
                   Início da Produção:{" "}
-                  <strong>{convertData(concluidos.data_ini_producao)}</strong>
+                  <strong>{concluidos.data_ini_producao}</strong>
                 </p>
                 <p>
                   Operador de Produção: <strong>{concluidos.operador}</strong>
@@ -236,15 +238,23 @@ export default function Cartao(props) {
                 {concluidos.data_conclusao ? (
                   <p>
                     Término da Produção:{" "}
-                    <strong>{convertData(concluidos.data_conclusao)}</strong>{" "}
+                    <strong>{concluidos.data_conclusao}</strong>{" "}
                   </p>
                 ) : (
                   ""
                 )}
+                                  
               </>
             ) : (
               ""
             )}
+            {administrador && concluidos.data_ini_producao && !concluidos.data_conclusao ? (
+                      <Button size="small" onClick={() => concluir()}>
+                        Concluir Produção
+                      </Button>
+                    ) : (
+                      ""
+                    )}
           </div>
         </Box>
       </Modal>

@@ -16,9 +16,15 @@
 
   function convertData(dataInput) {
     let data = new Date(dataInput);
+    //data.setDate(data.getDate() + 1)
+    let dataFormatada = data.toLocaleDateString();
+    return dataFormatada;
+  }
+  function convertDataBanco(dataInput) {
+    let data = new Date(dataInput);
     data.setDate(data.getDate() + 1)
-    let dataFormatada = data.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" });
+    let dataFormatada = data.toLocaleDateString();
     return dataFormatada;
   }
 
-  export {agora, convertData};
+  export {agora, convertData, convertDataBanco};

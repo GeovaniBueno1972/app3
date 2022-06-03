@@ -66,8 +66,25 @@ ul#navegacao a:-webkit-any-link:hover{
 }
 
 .vazio{
+  display: flex;
+  flex-direction: row;
   
   height: 40px;
+}
+
+#aguardando{
+  margin-left: 5px;
+  color: #ccc;
+}
+
+#producao{
+  margin-left: 30px;
+  color: #00BFFF;
+}
+
+#concluido{
+  margin-left: 30px;
+  color: #0F0;
 }
 
 .datas{

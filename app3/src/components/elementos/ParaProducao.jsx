@@ -16,9 +16,10 @@ const Paraproducao = (props) => {
   const dia = new Date();
   
   const estadoInicial = {
-    data_ini_producao: agora(),
+    data_ini_producao: dia,
     user_id: "",
-    pedido_numero: props.pedido
+    pedido_numero: props.pedido,
+    //data_conclusao: ""
   };
 
   
@@ -84,11 +85,11 @@ const Paraproducao = (props) => {
               fullWidth
               label="Data inicio da Produção"
               variant="standard"
-              defaultValue={pedido.data_ini_producao}
+              defaultValue={agora()}
               name="data_ini_producao"
               type="date"
               onChange={onChange}
-              value={pedido.data_ini_producao ?? ""}
+              value={agora() ?? ""}
             ></TextField>
           </Grid>
           <Grid item xs={4}>

@@ -17,8 +17,8 @@ export default function AdminUsuarios(props) {
   const baseApiUrl = "https://teste-producao1.herokuapp.com";
 
   function onChange(event) {
-    const { value, name } = event.target;
-    //if ([name] === "id_funcao") value = parseInt(value, 10);
+    var { value, name } = event.target;
+    if ([name] === "name") value = value.toUpperCase();
 
     setUsuario({
       ...usuario,

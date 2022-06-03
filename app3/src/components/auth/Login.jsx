@@ -28,7 +28,8 @@ const UserLogin = () => {
   const history = useHistory();
 
   function onChange(event) {
-    const { value, name } = event.target;
+    var { value, name } = event.target;
+    if ([name] === "name") value = value.toUpperCase();
 
     setUser({
       ...user,
